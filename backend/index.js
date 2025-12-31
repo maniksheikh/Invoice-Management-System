@@ -16,16 +16,18 @@ mongoose.connect(MONGODB_URI)
 app.use(cors());
 app.use(express.json());
 
-// Import Person Routes
+// Import Routes
 const personRoutes = require('./api/person');
+const invoiceRoutes = require('./api/invoice');
 
 // Base Route
 app.get('/', (req, res) => {
   res.send('AI Invoice Management System Backend Running');
 });
 
-// Person API Routes
+// API Routes
 app.use('/api/person', personRoutes);
+app.use('/api/invoice', invoiceRoutes);
 
 // AI processing endpoint placeholder
 app.post('/api/process-invoice', async (req, res) => {
