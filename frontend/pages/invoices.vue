@@ -7,12 +7,26 @@
           <h1 class="text-3xl font-bold text-white">Invoices</h1>
           <p class="text-gray-400 mt-1">Manage and track your business billing</p>
         </div>
-        <button class="flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white px-6 py-2.5 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg shadow-indigo-500/20">
+        <button 
+          @click="showCreateModal = true"
+          class="flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white px-6 py-2.5 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg shadow-indigo-500/20"
+        >
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
           Create Invoice
         </button>
+      </div>
+
+      <!-- Loading State -->
+      <div v-if="pending" class="flex justify-center py-12">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+      </div>
+
+      <!-- Error State -->
+      <div v-if="error" class="bg-rose-500/10 border border-rose-500/20 text-rose-400 px-4 py-3 rounded-xl mb-8">
+        Error loading invoices: {{ error.message }}
+        <button @click="refresh" class="ml-4 underline">Retry</button>
       </div>
 
       <!-- Stats Summary -->
@@ -126,18 +140,120 @@
         </div>
       </div>
     </div>
+
+    <!-- Create Invoice Modal -->
+    <div v-if="showCreateModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4">
+      <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" @click="showCreateModal = false"></div>
+      <div class="relative bg-slate-900 border border-white/10 rounded-2xl w-full max-w-md p-6 shadow-2xl">
+        <h2 class="text-xl font-bold text-white mb-6">Create New Invoice</h2>
+        
+        <form @submit.prevent="createInvoice" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-1">Invoice Number</label>
+            <input v-model="newInvoice.number" type="text" required placeholder="INV-2024-001" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-1">Client Name</label>
+            <input v-model="newInvoice.client" type="text" required placeholder="Acme Corp" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-1">Amount ($)</label>
+              <input v-model.number="newInvoice.amount" type="number" step="0.01" required placeholder="0.00" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-1">Status</label>
+              <select v-model="newInvoice.status" class="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 appearance-none cursor-pointer">
+                <option value="pending" class="bg-slate-900">Pending</option>
+                <option value="paid" class="bg-slate-900">Paid</option>
+                <option value="overdue" class="bg-slate-900">Overdue</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-1">Date</label>
+            <input v-model="newInvoice.date" type="text" required placeholder="Dec 31, 2024" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
+          </div>
+
+          <div class="flex gap-3 pt-4">
+            <button type="button" @click="showCreateModal = false" class="flex-1 px-4 py-2 rounded-xl border border-white/10 text-gray-400 hover:bg-white/5 transition-colors font-medium">
+              Cancel
+            </button>
+            <button type="submit" :disabled="creating" class="flex-1 bg-indigo-500 hover:bg-indigo-400 disabled:opacity-50 text-white py-2 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20">
+              {{ creating ? 'Creating...' : 'Create Invoice' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
+const config = useRuntimeConfig()
 const searchQuery = ref('')
 const statusFilter = ref('all')
+const showCreateModal = ref(false)
+const creating = ref(false)
 
-const stats = [
-  { label: 'Total Revenue', value: '$45,280.00', trend: '+12.5% vs last month', trendUp: true },
-  { label: 'Paid Invoices', value: '24', trend: '85% collection rate', trendUp: true },
-  { label: 'Pending Amount', value: '$12,450.00', trend: 'Requires attention', trendUp: false },
-]
+const newInvoice = ref({
+  number: '',
+  client: '',
+  amount: 0,
+  status: 'pending',
+  date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+})
+
+// Fetch Invoices from Backend
+const { data: invoices, pending, error, refresh } = await useFetch(`${config.public.apiBase}/invoice/v1`, {
+  lazy: false,
+  server: true
+})
+
+// Create Invoice Function
+const createInvoice = async () => {
+  try {
+    creating.value = true
+    const { error: postError } = await useFetch(`${config.public.apiBase}/invoice/v1`, {
+      method: 'POST',
+      body: newInvoice.value
+    })
+
+    if (postError.value) throw postError.value
+
+    // Success
+    showCreateModal.value = false
+    newInvoice.value = {
+      number: '',
+      client: '',
+      amount: 0,
+      status: 'pending',
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    }
+    await refresh()
+  } catch (err) {
+    alert('Failed to create invoice: ' + err.message)
+  } finally {
+    creating.value = false
+  }
+}
+
+// Dynamic Statistics
+const stats = computed(() => {
+  if (!invoices.value) return []
+  
+  const total = invoices.value.reduce((sum, inv) => sum + inv.amount, 0)
+  const paidCount = invoices.value.filter(inv => inv.status === 'paid').length
+  const pendingAmount = invoices.value
+    .filter(inv => inv.status === 'pending' || inv.status === 'overdue')
+    .reduce((sum, inv) => sum + inv.amount, 0)
+
+  return [
+    { label: 'Total Revenue', value: `$${total.toLocaleString()}`, trend: 'Total volume', trendUp: true },
+    { label: 'Paid Invoices', value: paidCount.toString(), trend: `${Math.round((paidCount / (invoices.value.length || 1)) * 100)}% collection rate`, trendUp: true },
+    { label: 'Outstanding Amount', value: `$${pendingAmount.toLocaleString()}`, trend: 'Requires attention', trendUp: false },
+  ]
+})
 
 const statusClasses = {
   paid: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20',
@@ -145,16 +261,9 @@ const statusClasses = {
   overdue: 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
 }
 
-const mockInvoices = [
-  { id: 1, number: 'INV-2024-001', client: 'Acme Corp', date: 'Dec 28, 2024', amount: 3500.00, status: 'paid' },
-  { id: 2, number: 'INV-2024-002', client: 'Global Tech', date: 'Dec 25, 2024', amount: 1200.50, status: 'pending' },
-  { id: 3, number: 'INV-2024-003', client: 'Design Studio', date: 'Dec 20, 2024', amount: 850.00, status: 'overdue' },
-  { id: 4, number: 'INV-2024-004', client: 'Nova Soft', date: 'Dec 15, 2024', amount: 5600.00, status: 'paid' },
-  { id: 5, number: 'INV-2024-005', client: 'Pixel Perfect', date: 'Dec 10, 2024', amount: 2100.00, status: 'pending' },
-]
-
 const filteredInvoices = computed(() => {
-  return mockInvoices.filter(invoice => {
+  if (!invoices.value) return []
+  return invoices.value.filter(invoice => {
     const matchesSearch = invoice.number.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
                          invoice.client.toLowerCase().includes(searchQuery.value.toLowerCase())
     const matchesStatus = statusFilter.value === 'all' || invoice.status === statusFilter.value
