@@ -69,9 +69,10 @@
         </div>
       </div>
 
-      <!-- Invoices Table -->
+      <!-- Invoices List (Desktop Table / Mobile Cards) -->
       <div class="bg-white/5 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-sm">
-        <div class="overflow-x-auto">
+        <!-- Desktop Table -->
+        <div class="hidden md:block overflow-x-auto">
           <table class="w-full text-left">
             <thead>
               <tr class="border-b border-white/10 bg-white/5">
@@ -128,6 +129,45 @@
               </tr>
             </tbody>
           </table>
+        </div>
+
+        <!-- Mobile Layout (Cards) -->
+        <div class="md:hidden divide-y divide-white/5">
+          <div v-for="invoice in filteredInvoices" :key="invoice.id" class="p-4 space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-white font-medium">#{{ invoice.number }}</span>
+              <span 
+                class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                :class="statusClasses[invoice.status]"
+              >
+                {{ invoice.status }}
+              </span>
+            </div>
+            
+            <div class="flex items-center gap-3">
+              <div class="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center text-sm font-bold text-indigo-300">
+                {{ invoice.client.split(' ').map(n => n[0]).join('') }}
+              </div>
+              <div>
+                <p class="text-white font-medium">{{ invoice.client }}</p>
+                <p class="text-gray-400 text-xs">{{ invoice.date }}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-2">
+              <span class="text-lg font-bold text-white">${{ invoice.amount.toLocaleString() }}</span>
+              <div class="flex gap-2">
+                <NuxtLink :to="`/invoices/${invoice._id}`" class="px-4 py-2 bg-white/5 hover:bg-white/10 text-gray-300 text-sm font-medium rounded-lg transition-all">
+                  View
+                </NuxtLink>
+                <button class="p-2 bg-white/5 hover:bg-white/10 text-gray-300 rounded-lg transition-all">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
         
         <!-- Empty State -->
