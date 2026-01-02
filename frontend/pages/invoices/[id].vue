@@ -15,13 +15,24 @@
           </NuxtLink>
           <div class="flex items-center gap-4">
             <h1 class="text-3xl font-bold text-white">Invoice #{{ invoice?.number }}</h1>
-            <span 
-              v-if="invoice"
-              class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
-              :class="statusClasses[invoice.status]"
-            >
-              {{ invoice.status }}
-            </span>
+            <div class="relative group/status">
+              <span 
+                v-if="invoice"
+                class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider cursor-pointer hover:opacity-80 transition-all border border-white/10"
+                :class="statusClasses[invoice.status]"
+              >
+                {{ invoice.status === 'unpaid' ? 'Unpaid' : invoice.status }}
+              </span>
+              <div class="absolute left-0 top-full mt-1 hidden group-hover/status:block z-50 bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden min-w-[120px]">
+                <button v-for="s in ['paid', 'unpaid', 'overdue']" :key="s" 
+                  @click="updateStatus(s)"
+                  class="w-full text-left px-4 py-2 text-xs font-semibold uppercase tracking-wider hover:bg-white/5 transition-colors"
+                  :class="s === invoice?.status ? 'text-indigo-400' : 'text-gray-400'"
+                >
+                  {{ s }}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -88,7 +99,7 @@
               <p class="text-xl font-bold text-white">{{ invoice.date }}</p>
               <div class="pt-4">
                 <p class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">Status</p>
-                <p class="text-lg font-bold text-white capitalize">{{ invoice.status }}</p>
+                <p class="text-lg font-bold text-white capitalize">{{ invoice.status === 'unpaid' ? 'Unpaid' : invoice.status }}</p>
               </div>
             </div>
           </div>
@@ -186,12 +197,13 @@ const route = useRoute()
 const config = useRuntimeConfig()
 const showDeleteModal = ref(false)
 const deleting = ref(false)
+const updatingStatus = ref(false)
 
-const { data: invoice, pending, error } = await useFetch(`${config.public.apiBase}/invoice/v1/${route.params.id}`)
+const { data: invoice, pending, error, refresh } = await useFetch(`${config.public.apiBase}/invoice/v1/${route.params.id}`)
 
 const statusClasses = {
   paid: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20',
-  pending: 'bg-amber-500/10 text-amber-400 border border-amber-500/20',
+  unpaid: 'bg-amber-500/10 text-amber-400 border border-amber-500/20',
   overdue: 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
 }
 
@@ -218,6 +230,23 @@ const handleDelete = async () => {
     alert('Failed to delete invoice: ' + err.message)
   } finally {
     deleting.value = false
+  }
+}
+
+const updateStatus = async (status) => {
+  try {
+    updatingStatus.value = true
+    const { error: patchError } = await useFetch(`${config.public.apiBase}/invoice/v1/${route.params.id}/status`, {
+      method: 'PATCH',
+      body: { status }
+    })
+
+    if (patchError.value) throw patchError.value
+    await refresh()
+  } catch (err) {
+    alert('Failed to update status: ' + (err.data?.message || err.message))
+  } finally {
+    updatingStatus.value = false
   }
 }
 
