@@ -63,7 +63,7 @@
           >
             <option value="all">All Status</option>
             <option value="paid">Paid</option>
-            <option value="pending">Pending</option>
+            <option value="unpaid">Unpaid</option>
             <option value="overdue">Overdue</option>
           </select>
         </div>
@@ -108,7 +108,7 @@
                     class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
                     :class="statusClasses[invoice.status]"
                   >
-                    {{ invoice.status }}
+                    {{ invoice.status === 'unpaid' ? 'Unpaid' : invoice.status }}
                   </span>
                 </td>
                 <td class="px-6 py-4 text-right">
@@ -119,11 +119,27 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                       </svg>
                     </NuxtLink>
-                    <button class="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all" title="Download">
+                    <button @click="confirmDelete(invoice)" class="p-2 text-rose-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all" title="Delete">
                       <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
                     </button>
+                    <div class="relative group/status">
+                      <button class="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all" title="Change Status">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                      </button>
+                      <div class="absolute right-0 top-full mt-1 hidden group-hover/status:block z-50 bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden min-w-[120px]">
+                        <button v-for="s in ['paid', 'unpaid', 'overdue']" :key="s" 
+                          @click="updateStatus(invoice._id, s)"
+                          class="w-full text-left px-4 py-2 text-xs font-semibold uppercase tracking-wider hover:bg-white/5 transition-colors"
+                          :class="s === invoice.status ? 'text-indigo-400' : 'text-gray-400'"
+                        >
+                          {{ s }}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </td>
               </tr>
@@ -140,7 +156,7 @@
                 class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
                 :class="statusClasses[invoice.status]"
               >
-                {{ invoice.status }}
+                {{ invoice.status === 'unpaid' ? 'Unpaid' : invoice.status }}
               </span>
             </div>
             
@@ -160,11 +176,27 @@
                 <NuxtLink :to="`/invoices/${invoice._id}`" class="px-4 py-2 bg-white/5 hover:bg-white/10 text-gray-300 text-sm font-medium rounded-lg transition-all">
                   View
                 </NuxtLink>
-                <button class="p-2 bg-white/5 hover:bg-white/10 text-gray-300 rounded-lg transition-all">
+                <button @click="confirmDelete(invoice)" class="p-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 rounded-lg transition-all">
                   <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
                 </button>
+                <div class="relative group/status-mobile">
+                  <button class="p-2 bg-white/5 hover:bg-white/10 text-gray-300 rounded-lg transition-all">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                  </button>
+                  <div class="absolute right-0 bottom-full mb-1 hidden group-hover/status-mobile:block z-50 bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden min-w-[120px]">
+                    <button v-for="s in ['paid', 'unpaid', 'overdue']" :key="s" 
+                      @click="updateStatus(invoice._id, s)"
+                      class="w-full text-left px-4 py-2 text-xs font-semibold uppercase tracking-wider hover:bg-white/5 transition-colors"
+                      :class="s === invoice.status ? 'text-indigo-400' : 'text-gray-400'"
+                    >
+                      {{ s }}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -204,7 +236,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-400 mb-1">Status</label>
               <select v-model="newInvoice.status" class="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 appearance-none cursor-pointer">
-                <option value="pending" class="bg-slate-900">Pending</option>
+                <option value="unpaid" class="bg-slate-900">Unpaid</option>
                 <option value="paid" class="bg-slate-900">Paid</option>
                 <option value="overdue" class="bg-slate-900">Overdue</option>
               </select>
@@ -227,6 +259,29 @@
       </div>
     </div>
   </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div v-if="showDeleteListModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" @click="showDeleteListModal = false"></div>
+    <div class="relative bg-slate-900 border border-white/10 rounded-2xl w-full max-w-md p-6 shadow-2xl">
+      <div class="w-16 h-16 bg-rose-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+      <h2 class="text-xl font-bold text-white mb-2 text-center">Delete Invoice?</h2>
+      <p class="text-gray-400 text-center mb-6">Are you sure you want to delete invoice #{{ invoiceToDelete?.number }}? This action cannot be undone.</p>
+      
+      <div class="flex gap-3">
+        <button @click="showDeleteListModal = false" class="flex-1 px-4 py-3 rounded-xl border border-white/10 text-gray-400 hover:bg-white/5 transition-colors font-medium">
+          Cancel
+        </button>
+        <button @click="handleDelete" :disabled="deletingInvoice" class="flex-1 bg-rose-500 hover:bg-rose-400 disabled:opacity-50 text-white py-3 rounded-xl font-bold transition-all shadow-lg shadow-rose-500/20">
+          {{ deletingInvoice ? 'Deleting...' : 'Yes, Delete' }}
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -234,13 +289,17 @@ const config = useRuntimeConfig()
 const searchQuery = ref('')
 const statusFilter = ref('all')
 const showCreateModal = ref(false)
+const showDeleteListModal = ref(false)
+const invoiceToDelete = ref(null)
 const creating = ref(false)
+const updatingStatus = ref(false)
+const deletingInvoice = ref(false)
 
 const newInvoice = ref({
   number: '',
   client: '',
   amount: 0,
-  status: 'pending',
+  status: 'unpaid',
   date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 })
 
@@ -267,7 +326,7 @@ const createInvoice = async () => {
       number: '',
       client: '',
       amount: 0,
-      status: 'pending',
+      status: 'unpaid',
       date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     }
     await refresh()
@@ -278,6 +337,51 @@ const createInvoice = async () => {
   }
 }
 
+// Update Status Function
+const updateStatus = async (id, status) => {
+  try {
+    updatingStatus.value = true
+    const { error: patchError } = await useFetch(`${config.public.apiBase}/invoice/v1/${id}/status`, {
+      method: 'PATCH',
+      body: { status }
+    })
+
+    if (patchError.value) throw patchError.value
+    await refresh()
+  } catch (err) {
+    alert('Failed to update status: ' + (err.data?.message || err.message))
+  } finally {
+    updatingStatus.value = false
+  }
+}
+
+// Delete Functions
+const confirmDelete = (invoice) => {
+  invoiceToDelete.value = invoice
+  showDeleteListModal.value = true
+}
+
+const handleDelete = async () => {
+  if (!invoiceToDelete.value) return
+  
+  try {
+    deletingInvoice.value = true
+    const { error: delError } = await useFetch(`${config.public.apiBase}/invoice/v1/${invoiceToDelete.value._id}`, {
+      method: 'DELETE'
+    })
+
+    if (delError.value) throw delError.value
+
+    showDeleteListModal.value = false
+    invoiceToDelete.value = null
+    await refresh()
+  } catch (err) {
+    alert('Failed to delete invoice: ' + (err.data?.message || err.message))
+  } finally {
+    deletingInvoice.value = false
+  }
+}
+
 // Dynamic Statistics
 const stats = computed(() => {
   if (!invoices.value) return []
@@ -285,7 +389,7 @@ const stats = computed(() => {
   const total = invoices.value.reduce((sum, inv) => sum + inv.amount, 0)
   const paidCount = invoices.value.filter(inv => inv.status === 'paid').length
   const pendingAmount = invoices.value
-    .filter(inv => inv.status === 'pending' || inv.status === 'overdue')
+    .filter(inv => inv.status === 'unpaid' || inv.status === 'overdue')
     .reduce((sum, inv) => sum + inv.amount, 0)
 
   return [
@@ -297,7 +401,7 @@ const stats = computed(() => {
 
 const statusClasses = {
   paid: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20',
-  pending: 'bg-amber-500/10 text-amber-400 border border-amber-500/20',
+  unpaid: 'bg-amber-500/10 text-amber-400 border border-amber-500/20',
   overdue: 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
 }
 
