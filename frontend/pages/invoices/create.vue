@@ -86,7 +86,7 @@
                   v-model="form.status" 
                   class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 appearance-none cursor-pointer transition-all"
                 >
-                  <option value="pending" class="bg-slate-900">Pending</option>
+                  <option value="unpaid" class="bg-slate-900">Unpaid</option>
                   <option value="paid" class="bg-slate-900">Paid</option>
                   <option value="overdue" class="bg-slate-900">Overdue</option>
                 </select>
@@ -136,7 +136,7 @@ const form = ref({
   number: `INV-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`,
   client: '',
   amount: null,
-  status: 'pending',
+  status: 'unpaid',
   date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 })
 
