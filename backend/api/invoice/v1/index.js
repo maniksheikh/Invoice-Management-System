@@ -1,18 +1,6 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const router = express.Router();
-
-// Invoice Schema
-const invoiceSchema = new mongoose.Schema({
-    number: { type: String, required: true, unique: true },
-    client: { type: String, required: true },
-    date: { type: String, required: true },
-    amount: { type: Number, required: true },
-    status: { type: String, enum: ['paid', 'pending', 'overdue'], default: 'pending' },
-    createdAt: { type: Date, default: Date.now }
-});
-
-const Invoice = mongoose.models.Invoice || mongoose.model('Invoice', invoiceSchema);
+const Invoice = require('../../../models/Invoice');
 
 // Create Invoice
 router.post('/', async (req, res) => {
@@ -36,6 +24,17 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Get Single Invoice by Number
+router.get('/number/:number', async (req, res) => {
+    try {
+        const invoice = await Invoice.findOne({ number: req.params.number });
+        if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
+        res.json(invoice);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching invoice', error: error.message });
+    }
+});
+
 // Get Single Invoice
 router.get('/:id', async (req, res) => {
     try {
@@ -44,6 +43,25 @@ router.get('/:id', async (req, res) => {
         res.json(invoice);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching invoice', error: error.message });
+    }
+});
+
+// Update Invoice Status
+router.patch('/:id/status', async (req, res) => {
+    try {
+        const { status } = req.body;
+        if (!['paid', 'unpaid', 'overdue'].includes(status)) {
+            return res.status(400).json({ message: 'Invalid status' });
+        }
+        const invoice = await Invoice.findByIdAndUpdate(
+            req.params.id,
+            { status },
+            { new: true }
+        );
+        if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
+        res.json({ message: 'Invoice status updated successfully', invoice });
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating invoice status', error: error.message });
     }
 });
 
