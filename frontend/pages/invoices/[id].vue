@@ -38,6 +38,15 @@
 
         <div class="flex items-center gap-3">
           <button 
+            @click="openEditModal"
+            class="flex-1 md:flex-none flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white px-6 py-2.5 rounded-xl font-semibold border border-white/10 transition-all"
+          >
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            Edit
+          </button>
+          <button 
             @click="handlePrint"
             class="flex-1 md:flex-none flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white px-6 py-2.5 rounded-xl font-semibold border border-white/10 transition-all"
           >
@@ -189,17 +198,108 @@
         </div>
       </div>
     </div>
+    <!-- Edit Invoice Modal -->
+    <div v-if="showEditModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4">
+      <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" @click="showEditModal = false"></div>
+      <div class="relative bg-slate-900 border border-white/10 rounded-2xl w-full max-w-md p-6 shadow-2xl">
+        <h2 class="text-xl font-bold text-white mb-6">Edit Invoice</h2>
+        
+        <form @submit.prevent="handleUpdate" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-1">Invoice Number</label>
+            <input v-model="editForm.number" type="text" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-1">Client Name</label>
+            <input v-model="editForm.client" type="text" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-1">Amount ($)</label>
+              <input v-model.number="editForm.amount" type="number" step="0.01" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-1">Status</label>
+              <select v-model="editForm.status" class="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 appearance-none cursor-pointer">
+                <option value="unpaid" class="bg-slate-900">Unpaid</option>
+                <option value="paid" class="bg-slate-900">Paid</option>
+                <option value="overdue" class="bg-slate-900">Overdue</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-1">Date</label>
+            <input v-model="editForm.date" type="text" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
+          </div>
+
+          <div class="flex gap-3 pt-4">
+            <button type="button" @click="showEditModal = false" class="flex-1 px-4 py-2 rounded-xl border border-white/10 text-gray-400 hover:bg-white/5 transition-colors font-medium">
+              Cancel
+            </button>
+            <button type="submit" :disabled="updating" class="flex-1 bg-indigo-500 hover:bg-indigo-400 disabled:opacity-50 text-white py-2 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20">
+              {{ updating ? 'Saving...' : 'Save Changes' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
+definePageMeta({
+  middleware: ['auth']
+})
+
 const route = useRoute()
 const config = useRuntimeConfig()
 const showDeleteModal = ref(false)
+const showEditModal = ref(false)
 const deleting = ref(false)
+const updating = ref(false)
 const updatingStatus = ref(false)
 
 const { data: invoice, pending, error, refresh } = await useFetch(`${config.public.apiBase}/invoice/v1/${route.params.id}`)
+
+const editForm = ref({
+  number: '',
+  client: '',
+  amount: 0,
+  status: '',
+  date: ''
+})
+
+const openEditModal = () => {
+  if (invoice.value) {
+    editForm.value = {
+      number: invoice.value.number,
+      client: invoice.value.client,
+      amount: invoice.value.amount,
+      status: invoice.value.status,
+      date: invoice.value.date
+    }
+    showEditModal.value = true
+  }
+}
+
+const handleUpdate = async () => {
+  try {
+    updating.value = true
+    const { error: patchError } = await useFetch(`${config.public.apiBase}/invoice/v1/${route.params.id}`, {
+      method: 'PUT',
+      body: editForm.value
+    })
+
+    if (patchError.value) throw patchError.value
+    
+    showEditModal.value = false
+    await refresh()
+  } catch (err) {
+    alert('Failed to update invoice: ' + (err.data?.message || err.message))
+  } finally {
+    updating.value = false
+  }
+}
 
 const statusClasses = {
   paid: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20',

@@ -129,6 +129,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+  middleware: ['auth']
+})
+
 const config = useRuntimeConfig()
 const submitting = ref(false)
 
