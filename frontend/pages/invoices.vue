@@ -285,6 +285,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+  middleware: ['auth']
+})
+
 const config = useRuntimeConfig()
 const searchQuery = ref('')
 const statusFilter = ref('all')
