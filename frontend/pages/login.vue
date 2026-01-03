@@ -1,59 +1,82 @@
 <template>
-  <div class="flex min-h-[calc(100vh-64px)] flex-col justify-center px-6 py-12 lg:px-8 relative overflow-hidden">
-    <!-- Background Decoration -->
-    <div class="absolute -top-1/2 -left-1/4 w-1/2 h-full bg-indigo-500/10 blur-[120px] rounded-full"></div>
-    <div class="absolute -bottom-1/2 -right-1/4 w-1/2 h-full bg-purple-500/10 blur-[120px] rounded-full"></div>
-
-    <div class="sm:mx-auto sm:w-full sm:max-w-sm relative z-10">
-      <div class="flex justify-center">
-        <div class="h-12 w-12 rounded-xl bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-          <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A10.003 10.003 0 0014 2.054V1h-.5a.5.5 0 00-.5.5v1.054a10.003 10.003 0 00-5.26 17.383l.053.091m7.374.245a.75.75 0 001.06-.02 10.003 10.003 0 00-5.26-17.383V1h.5a.5.5 0 00.5.5v1.054a10.003 10.003 0 00-2.753 9.571" />
-          </svg>
-        </div>
-      </div>
-      <h2 class="mt-8 text-center text-3xl font-bold tracking-tight text-white">Welcome back</h2>
-      <p class="mt-2 text-center text-sm text-gray-400">
-        Don't have an account? 
-        <NuxtLink to="/register" class="font-semibold text-indigo-400 hover:text-indigo-300">Sign up for free</NuxtLink>
-      </p>
+  <div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <!-- Background Gradients -->
+    <div class="absolute inset-0 -z-10 bg-slate-950">
+      <div class="absolute top-0 left-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-[100px]"></div>
+      <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[100px]"></div>
     </div>
 
-    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm relative z-10">
-      <form @submit.prevent="handleLogin" class="space-y-6">
-        <div>
-          <label for="email" class="block text-sm font-medium leading-6 text-gray-300">Email address</label>
-          <div class="mt-2">
-            <input v-model="form.email" id="email" name="email" type="email" autocomplete="email" required
-              class="block w-full rounded-xl border-0 bg-white/5 py-2.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 placeholder:text-gray-500 transition-all px-4"
-              placeholder="name@company.com" />
+    <div class="max-w-md w-full space-y-8 bg-white/5 p-8 rounded-3xl border border-white/10 backdrop-blur-xl shadow-2xl relative z-10">
+      <div>
+        <div class="flex justify-center">
+          <div class="w-16 h-16 bg-indigo-500 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+            <svg class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
           </div>
         </div>
+        <h2 class="mt-8 text-center text-3xl font-extrabold text-white tracking-tight">
+          Welcome back
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-400">
+          Sign in to manage your invoices
+        </p>
+      </div>
 
-        <div>
-          <div class="flex items-center justify-between">
-            <label for="password" class="block text-sm font-medium leading-6 text-gray-300">Password</label>
-            <div class="text-sm">
-              <a href="#" class="font-semibold text-indigo-400 hover:text-indigo-300">Forgot password?</a>
+      <!-- Error Alert -->
+      <div v-if="error" class="bg-rose-500/10 border border-rose-500/20 px-4 py-3 rounded-xl">
+        <p class="text-center text-sm text-rose-400 font-medium">{{ error }}</p>
+      </div>
+
+      <form class="mt-8 space-y-6" @submit.prevent="handleLogin">
+        <div class="space-y-4">
+          <div>
+            <label for="email-address" class="block text-sm font-medium text-gray-400 mb-1">Email address</label>
+            <input 
+              v-model="form.email"
+              id="email-address" 
+              name="email" 
+              type="email" 
+              required 
+              class="appearance-none relative block w-full px-4 py-3 border border-white/10 placeholder-gray-500 text-white rounded-xl bg-white/5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all sm:text-sm" 
+              placeholder="name@company.com" 
+            />
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label for="password" class="block text-sm font-medium text-gray-400">Password</label>
+              <a href="#" class="text-xs font-medium text-indigo-400 hover:text-indigo-300">Forgot password?</a>
             </div>
+            <input 
+              v-model="form.password"
+              id="password" 
+              name="password" 
+              type="password" 
+              required 
+              class="appearance-none relative block w-full px-4 py-3 border border-white/10 placeholder-gray-500 text-white rounded-xl bg-white/5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all sm:text-sm" 
+              placeholder="••••••••" 
+            />
           </div>
-          <div class="mt-2">
-            <input v-model="form.password" id="password" name="password" type="password" autocomplete="current-password" required
-              class="block w-full rounded-xl border-0 bg-white/5 py-2.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 placeholder:text-gray-500 transition-all px-4"
-              placeholder="••••••••" />
-          </div>
-        </div>
-
-        <div v-if="error" class="rounded-lg bg-red-500/10 p-3 text-sm text-red-400 border border-red-500/20 text-center">
-          {{ error }}
         </div>
 
         <div>
-          <button type="submit" :disabled="loading"
-            class="flex w-full justify-center rounded-xl bg-indigo-500 px-3 py-2.5 text-sm font-semibold leading-6 text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed transform active:scale-[0.98]">
-            <span v-if="loading" class="mr-2">Logging in...</span>
+          <button 
+            type="submit" 
+            :disabled="loading"
+            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-indigo-500 hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-indigo-500/20 disabled:opacity-50"
+          >
+            <span v-if="loading">Signing in...</span>
             <span v-else>Sign in</span>
           </button>
+        </div>
+
+        <div class="text-center">
+          <p class="text-sm text-gray-400">
+            Don't have an account? 
+            <NuxtLink to="/register" class="font-medium text-indigo-400 hover:text-indigo-300 transition-colors">
+              Create one for free
+            </NuxtLink>
+          </p>
         </div>
       </form>
     </div>
@@ -61,6 +84,7 @@
 </template>
 
 <script setup>
+const { login } = useAuth()
 const form = reactive({
   email: '',
   password: ''
@@ -74,20 +98,16 @@ const handleLogin = async () => {
   error.value = null
   
   try {
-    const response = await $fetch('http://localhost:3001/api/person/v1/login', {
-      method: 'POST',
-      body: form
-    })
-
-    // Store user data in local storage
-    localStorage.setItem('user', JSON.stringify(response.person))
-    
-    // Refresh page or navigate
-    window.location.href = '/'
+    await login(form.email, form.password)
+    navigateTo('/invoices')
   } catch (err) {
-    error.value = err.data?.message || 'Something went wrong. Please try again.'
+    error.value = err.message
   } finally {
     loading.value = false
   }
 }
+
+useHead({
+  title: 'Login - InvoiceAI',
+})
 </script>

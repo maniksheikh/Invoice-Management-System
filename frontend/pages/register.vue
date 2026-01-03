@@ -1,63 +1,94 @@
 <template>
-  <div class="flex min-h-[calc(100vh-64px)] flex-col justify-center px-6 py-12 lg:px-8 relative overflow-hidden">
-    <!-- Background Decoration -->
-    <div class="absolute -top-1/2 -left-1/4 w-1/2 h-full bg-indigo-500/10 blur-[120px] rounded-full"></div>
-    <div class="absolute -bottom-1/2 -right-1/4 w-1/2 h-full bg-purple-500/10 blur-[120px] rounded-full"></div>
-
-    <div class="sm:mx-auto sm:w-full sm:max-w-sm relative z-10">
-      <div class="flex justify-center">
-        <div class="h-12 w-12 rounded-xl bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-          <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-          </svg>
-        </div>
-      </div>
-      <h2 class="mt-8 text-center text-3xl font-bold tracking-tight text-white">Create an account</h2>
-      <p class="mt-2 text-center text-sm text-gray-400">
-        Already have an account? 
-        <NuxtLink to="/login" class="font-semibold text-indigo-400 hover:text-indigo-300">Sign in here</NuxtLink>
-      </p>
+  <div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <!-- Background Gradients -->
+    <div class="absolute inset-0 -z-10 bg-slate-950">
+      <div class="absolute top-0 right-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-[100px]"></div>
+      <div class="absolute bottom-0 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[100px]"></div>
     </div>
 
-    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm relative z-10">
-      <form @submit.prevent="handleRegister" class="space-y-6">
-        <div>
-          <label for="name" class="block text-sm font-medium leading-6 text-gray-300">Full Name</label>
-          <div class="mt-2">
-            <input v-model="form.name" id="name" name="name" type="text" required
-              class="block w-full rounded-xl border-0 bg-white/5 py-2.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 placeholder:text-gray-500 transition-all px-4"
-              placeholder="Full Name" />
+    <div class="max-w-md w-full space-y-8 bg-white/5 p-8 rounded-3xl border border-white/10 backdrop-blur-xl shadow-2xl relative z-10">
+      <div>
+        <div class="flex justify-center">
+          <div class="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/20">
+            <svg class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+            </svg>
+          </div>
+        </div>
+        <h2 class="mt-8 text-center text-3xl font-extrabold text-white tracking-tight">
+          Create account
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-400">
+          Start automating your invoices today
+        </p>
+      </div>
+
+      <!-- Messages -->
+      <div v-if="error" class="bg-rose-500/10 border border-rose-500/20 px-4 py-3 rounded-xl">
+        <p class="text-center text-sm text-rose-400 font-medium">{{ error }}</p>
+      </div>
+      <div v-if="success" class="bg-emerald-500/10 border border-emerald-500/20 px-4 py-3 rounded-xl">
+        <p class="text-center text-sm text-emerald-400 font-medium">{{ success }}</p>
+      </div>
+
+      <form class="mt-8 space-y-6" @submit.prevent="handleRegister">
+        <div class="space-y-4">
+          <div>
+            <label for="full-name" class="block text-sm font-medium text-gray-400 mb-1">Full Name</label>
+            <input 
+              v-model="form.name"
+              id="full-name" 
+              name="name" 
+              type="text" 
+              required 
+              class="appearance-none relative block w-full px-4 py-3 border border-white/10 placeholder-gray-500 text-white rounded-xl bg-white/5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all sm:text-sm" 
+              placeholder="John Doe" 
+            />
+          </div>
+          <div>
+            <label for="email-address" class="block text-sm font-medium text-gray-400 mb-1">Email address</label>
+            <input 
+              v-model="form.email"
+              id="email-address" 
+              name="email" 
+              type="email" 
+              required 
+              class="appearance-none relative block w-full px-4 py-3 border border-white/10 placeholder-gray-500 text-white rounded-xl bg-white/5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all sm:text-sm" 
+              placeholder="name@company.com" 
+            />
+          </div>
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-400 mb-1">Password</label>
+            <input 
+              v-model="form.password"
+              id="password" 
+              name="password" 
+              type="password" 
+              required 
+              class="appearance-none relative block w-full px-4 py-3 border border-white/10 placeholder-gray-500 text-white rounded-xl bg-white/5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all sm:text-sm" 
+              placeholder="••••••••" 
+            />
           </div>
         </div>
 
         <div>
-          <label for="email" class="block text-sm font-medium leading-6 text-gray-300">Email address</label>
-          <div class="mt-2">
-            <input v-model="form.email" id="email" name="email" type="email" autocomplete="email" required
-              class="block w-full rounded-xl border-0 bg-white/5 py-2.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 placeholder:text-gray-500 transition-all px-4"
-              placeholder="name@company.com" />
-          </div>
-        </div>
-
-        <div>
-          <label for="password" class="block text-sm font-medium leading-6 text-gray-300">Password</label>
-          <div class="mt-2">
-            <input v-model="form.password" id="password" name="password" type="password" required
-              class="block w-full rounded-xl border-0 bg-white/5 py-2.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 placeholder:text-gray-500 transition-all px-4"
-              placeholder="••••••••" />
-          </div>
-        </div>
-
-        <div v-if="error" class="rounded-lg bg-red-500/10 p-3 text-sm text-red-400 border border-red-500/20 text-center">
-          {{ error }}
-        </div>
-
-        <div>
-          <button type="submit" :disabled="loading"
-            class="flex w-full justify-center rounded-xl bg-indigo-500 px-3 py-2.5 text-sm font-semibold leading-6 text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed transform active:scale-[0.98]">
-            <span v-if="loading" class="mr-2">Creating account...</span>
-            <span v-else>Register</span>
+          <button 
+            type="submit" 
+            :disabled="loading"
+            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-indigo-500 hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-indigo-500/20 disabled:opacity-50"
+          >
+            <span v-if="loading">Creating account...</span>
+            <span v-else>Get started</span>
           </button>
+        </div>
+
+        <div class="text-center">
+          <p class="text-sm text-gray-400">
+            Already have an account? 
+            <NuxtLink to="/login" class="font-medium text-indigo-400 hover:text-indigo-300 transition-colors">
+              Sign in instead
+            </NuxtLink>
+          </p>
         </div>
       </form>
     </div>
@@ -65,6 +96,7 @@
 </template>
 
 <script setup>
+const { register } = useAuth()
 const form = reactive({
   name: '',
   email: '',
@@ -73,23 +105,27 @@ const form = reactive({
 
 const loading = ref(false)
 const error = ref(null)
+const success = ref(null)
 
 const handleRegister = async () => {
   loading.value = true
   error.value = null
+  success.value = null
   
   try {
-    await $fetch('http://localhost:3001/api/person/v1/register', {
-      method: 'POST',
-      body: form
-    })
-
-    // Auto login or redirect to login
-    navigateTo('/login')
+    await register(form.name, form.email, form.password)
+    success.value = 'Account created successfully! Redirecting to login...'
+    setTimeout(() => {
+      navigateTo('/login')
+    }, 2000)
   } catch (err) {
-    error.value = err.data?.message || 'Something went wrong. Please try again.'
+    error.value = err.message
   } finally {
     loading.value = false
   }
 }
+
+useHead({
+  title: 'Register - InvoiceAI',
+})
 </script>
