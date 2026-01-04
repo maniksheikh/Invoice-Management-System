@@ -1,7 +1,7 @@
 <template>
-  <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/50 backdrop-blur-xl">
+  <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-slate-900/70 backdrop-blur-xl shadow-sm">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="flex h-16 items-center justify-between">
+      <div class="relative flex h-16 items-center justify-between">
         <div class="flex items-center gap-8">
           <NuxtLink to="/" class="flex items-center gap-2 group">
             <div class="h-8 w-8 rounded-lg bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform">
@@ -11,13 +11,14 @@
             </div>
             <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">InvoiceAI</span>
           </NuxtLink>
-
-          <div class="hidden md:flex items-center gap-1">
-            <NuxtLink v-for="link in navLinks" :key="link.to" :to="link.to" 
-              class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white rounded-lg hover:bg-white/5 transition-all">
-              {{ link.label }}
-            </NuxtLink>
-          </div>
+        </div>
+        
+        <!-- Centered Navigation -->
+        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center gap-1">
+          <NuxtLink v-for="link in navLinks" :key="link.to" :to="link.to" 
+            class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white rounded-lg hover:bg-white/5 transition-all">
+            {{ link.label }}
+          </NuxtLink>
         </div>
 
         <div class="flex items-center gap-4">
@@ -93,23 +94,6 @@ const navLinks = [
   { label: 'Statistics', to: '/stats' },
 ]
 
-// Mock Auth State for now - will integrate with local storage later
-const isLoggedIn = ref(false)
-const user = ref(null)
+const { isLoggedIn, user, logout } = useAuth()
 const isMobileMenuOpen = ref(false)
-
-const logout = () => {
-  // Simple logout logic
-  isLoggedIn.value = false
-  user.value = null
-  navigateTo('/')
-}
-
-onMounted(() => {
-  const savedUser = localStorage.getItem('user')
-  if (savedUser) {
-    user.value = JSON.parse(savedUser)
-    isLoggedIn.value = true
-  }
-})
 </script>
