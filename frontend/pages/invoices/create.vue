@@ -18,7 +18,48 @@
 
       <!-- Form Card -->
       <div class="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 backdrop-blur-sm shadow-2xl">
-        <form @submit.prevent="handleSubmit" class="space-y-6">
+        <div v-if="createdInvoice" class="space-y-6">
+          <div class="text-center py-8">
+            <div class="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-2">Invoice Created Successfully!</h2>
+            <p class="text-gray-400">Would you like to upload an image for this invoice?</p>
+          </div>
+
+          <div class="border-2 border-dashed border-white/10 rounded-xl p-8 text-center hover:border-indigo-500/50 transition-colors">
+            <input 
+              type="file" 
+              accept="image/*" 
+              @change="handleImageUpload" 
+              class="hidden" 
+              id="invoice-image"
+              :disabled="submitting"
+            >
+            <label for="invoice-image" class="cursor-pointer block">
+              <div class="mb-4">
+                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                  <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </div>
+              <p class="text-sm text-gray-400 mb-2">Click to upload invoice image</p>
+              <p class="text-xs text-gray-500">SVG, PNG, JPG allowed</p>
+            </label>
+          </div>
+
+          <div class="flex justify-end gap-4">
+            <button 
+              @click="navigateTo('/invoices')" 
+              class="px-6 py-3 rounded-xl border border-white/10 text-gray-400 hover:bg-white/5 transition-all font-medium"
+            >
+              Skip for now
+            </button>
+          </div>
+        </div>
+
+        <form v-else @submit.prevent="handleSubmit" class="space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Invoice Number -->
             <div>
@@ -134,15 +175,32 @@ definePageMeta({
 })
 
 const config = useRuntimeConfig()
-const submitting = ref(false)
+const createdInvoice = ref(null)
 
-const form = ref({
-  number: `INV-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`,
-  client: '',
-  amount: null,
-  status: 'unpaid',
-  date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-})
+const handleImageUpload = async (event) => {
+  const file = event.target.files[0]
+  if (!file) return
+
+  const formData = new FormData()
+  formData.append('image', file)
+
+  try {
+    submitting.value = true
+    const { error } = await useFetch(`${config.public.apiBase}/invoice/v1/${createdInvoice.value._id}/upload`, {
+      method: 'POST',
+      body: formData
+    })
+
+    if (error.value) throw new Error(error.value.message || 'Failed to upload image')
+
+    navigateTo('/invoices')
+  } catch (err) {
+    console.error('Error uploading image:', err)
+    alert('Failed to upload image: ' + err.message)
+  } finally {
+    submitting.value = false
+  }
+}
 
 const handleSubmit = async () => {
   try {
@@ -154,7 +212,7 @@ const handleSubmit = async () => {
       return
     }
 
-    const { error } = await useFetch(`${config.public.apiBase}/invoice/v1`, {
+    const { data, error } = await useFetch(`${config.public.apiBase}/invoice/v1`, {
       method: 'POST',
       body: form.value
     })
@@ -163,12 +221,10 @@ const handleSubmit = async () => {
       throw new Error(error.value.message || 'Failed to create invoice')
     }
 
-    // Success - redirect back
-    navigateTo('/invoices')
+    createdInvoice.value = data.value.invoice
   } catch (err) {
     console.error('Error creating invoice:', err)
     alert('Failed to create invoice: ' + err.message)
-  } finally {
     submitting.value = false
   }
 }
