@@ -8,12 +8,4 @@
   </div>
 </template>
 
-<style>
-@import "~/assets/css/main.css";
 
-body {
-  @apply bg-slate-950;
-  margin: 0;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-}
-</style>

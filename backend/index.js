@@ -1,39 +1,59 @@
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
-require('dotenv').config();
+require("dotenv").config();
 
+const express = require("express");
+const cors = require("cors");
 const app = express();
-const PORT = process.env.PORT || 3001;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/invoice-system';
+global.app = app;
 
-// Connect to MongoDB
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
-
-// Middleware
-app.use(cors());
 app.use(express.json());
 
-// Import Routes
-const personRoutes = require('./api/person');
-const invoiceRoutes = require('./api/invoice');
+app.set("trust proxy", true);
 
-// Base Route
-app.get('/', (req, res) => {
-  res.send('AI Invoice Management System Backend Running');
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || "").split(",");
+// Strict CORS policy
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      console.log("Request Origin: ", origin);
+      if (!origin) return callback(null, true);
+      if (!allowedOrigins.includes(origin)) {
+        const msg = `The CORS policy for ${origin} does not allow access from the specified Origin.`;
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+  })
+);
+
+app.use("/api", require("./api/person"));
+app.use("/api", require("./api/invoice"));
+
+// Update the global error handling middleware
+app.use(async (err, req, res, next) => {
+  console.error(err.stack);
+  try {
+    // return sendErrorToSlack(err.stack || err.message, "vocalo");
+  } catch (error) {
+    console.error("Error during reporting to Slack:", error);
+  }
+  res.status(err.status || 500).json({ success: false, message: err.message });
 });
 
-// API Routes
-app.use('/api/person', personRoutes);
-app.use('/api/invoice', invoiceRoutes);
+const port = process.env.PORT || 3001;
 
-// AI processing endpoint placeholder
-app.post('/api/process-invoice', async (req, res) => {
-  res.json({ message: 'Invoice processing started' });
+const server = app.listen(port, () => {
+  console.log("Server started at port : ", port);
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+server.on("error", (error) => {
+  if (error.code === "EADDRINUSE") {
+    console.error(
+      `Error: Port ${port} is already in use. Please terminate the process using this port or choose a different port.`
+    );
+    process.exit(1);
+  } else {
+    throw error;
+  }
 });
+
+
