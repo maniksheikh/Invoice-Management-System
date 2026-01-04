@@ -6,6 +6,7 @@ const invoiceSchema = new mongoose.Schema({
     date: { type: String, required: true },
     amount: { type: Number, required: true },
     status: { type: String, enum: ['paid', 'unpaid', 'overdue'], default: 'unpaid' },
+    image: { type: String },
     createdAt: { type: Date, default: Date.now }
 });
 

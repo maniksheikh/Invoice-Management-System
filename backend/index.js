@@ -8,6 +8,7 @@ global.app = app;
 app.use(express.json());
 
 app.set("trust proxy", true);
+app.use('/uploads', express.static('uploads'));
 
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || "").split(",");
 // Strict CORS policy

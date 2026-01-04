@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Invoice = require('../../../models/Invoice');
 
+const upload = require('../../../middleware/upload');
+
 // Create Invoice
 router.post('/', async (req, res) => {
     try {
@@ -11,6 +13,35 @@ router.post('/', async (req, res) => {
         res.status(201).json({ message: 'Invoice created successfully', invoice });
     } catch (error) {
         res.status(500).json({ message: 'Error creating invoice', error: error.message });
+    }
+});
+
+// Upload Invoice Image
+router.post('/:id/upload', upload.single('image'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+
+        const imagePath = req.file.path.replace(/\\/g, '/'); // Normalize path
+        // We might want to store the relative path or full URL. 
+        // storing relative path 'uploads/filename.ext' is usually better.
+        // req.file.path gives full path, but let's check what we want.
+        // Express static serves from 'uploads' mapped to '/uploads'.
+        // So we need '/uploads/' + filename.
+        const relativePath = '/uploads/' + req.file.filename;
+
+        const invoice = await Invoice.findByIdAndUpdate(
+            req.params.id,
+            { image: relativePath },
+            { new: true }
+        );
+
+        if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
+
+        res.json({ message: 'File uploaded successfully', invoice });
+    } catch (error) {
+        res.status(500).json({ message: 'Error uploading file', error: error.message });
     }
 });
 
