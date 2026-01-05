@@ -26,16 +26,14 @@
 
       <!-- Quick Actions -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <NuxtLink to="/invoices/create" class="flex items-center gap-4 bg-indigo-500 hover:bg-indigo-400 text-white p-6 rounded-3xl transition-all shadow-lg shadow-indigo-500/20 group">
-          <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-          </div>
-          <div>
-            <p class="font-bold">Create Invoice</p>
-            <p class="text-xs text-indigo-100">Add new billing entry</p>
-          </div>
+        <NuxtLink 
+          to="/invoices/create"
+          class="flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white px-6 py-2.5 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg shadow-indigo-500/20"
+        >
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          Create Invoice
         </NuxtLink>
 
         <NuxtLink to="/invoices" class="flex items-center gap-4 bg-white/5 border border-white/10 hover:bg-white/10 text-white p-6 rounded-3xl transition-all group">
@@ -126,6 +124,10 @@
 const { user, isLoggedIn } = useAuth()
 const config = useRuntimeConfig()
 
+watch(isLoggedIn, (val) => {
+  console.log('Index.vue: isLoggedIn changed to', val)
+}, { immediate: true })
+
 // Icons for dashboard stats
 const RevenueIcon = defineComponent({
   template: `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`
@@ -140,7 +142,18 @@ const CollectionIcon = defineComponent({
 })
 
 // Fetch Invoices for stats if logged in
-const { data: invoices } = await useFetch(`${config.public.apiBase}/invoice/v1`, {
+// Fetch Invoices for stats if logged in
+const { $axios } = useNuxtApp()
+const { data: invoices, refresh: refreshInvoices } = await useAsyncData('dashboard-invoices', async () => {
+  if (!isLoggedIn.value) return []
+  try {
+    const response = await $axios.get('/invoice/v1')
+    return response.data
+  } catch (error) {
+    console.error('Failed to fetch invoices:', error)
+    return []
+  }
+}, {
   immediate: isLoggedIn.value,
   watch: [isLoggedIn]
 })
