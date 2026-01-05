@@ -1,4 +1,5 @@
 import { useMainStore } from "~/stores/index.js";
+import { computed, markRaw } from "vue";
 
 import {
     applyActionCode,
@@ -25,7 +26,9 @@ export default function useAuth() {
             const user = userCredential.user;
             console.log('Auth Composable: Firebase sign-in successful', user.email);
 
-            store.setUser(user);
+            // markRaw prevents Vue reactivity on Firebase user objects
+            // This avoids SecurityError from cross-origin popup window access
+            store.setUser(markRaw(user));
 
             const response = await store.getUserDetails(user.email);
             if (!response) {
@@ -75,7 +78,7 @@ export default function useAuth() {
                 isVerified: false,
                 photoURL: user.providerData[0]?.photoURL || null,
             };
-            store.setUser(user);
+            store.setUser(markRaw(user));
             store.postUserDetails(payload);
             $toast(
                 "A verification email has been send to your email. To sign in verify your email first."
@@ -92,7 +95,7 @@ export default function useAuth() {
             );
 
             const user = userCredential.user;
-            store.setUser(user);
+            store.setUser(markRaw(user));
 
             const userDetails = await store.getUserDetails(user.email);
             if (userDetails && userDetails.isVerified) {
@@ -133,15 +136,17 @@ export default function useAuth() {
     }
 
     function logout() {
+        console.log('Auth Composable: Logging out...');
         auth
             .signOut()
             .then(() => {
                 store.setUser(null);
                 store.setUserDetails(null);
+                console.log('Auth Composable: Logged out successfully');
                 return navigateTo("/");
             })
             .catch((e) => {
-                console.error(e);
+                console.error('Auth Composable: Logout error', e);
             });
     }
 

@@ -89,7 +89,7 @@
           </div>
 
           <!-- Mobile menu button -->
-          <button @click="isMobileMenuOpen = !isMobileMenuOpen" class="md:hidden p-2 text-gray-400 hover:text-white transition-colors">
+          <button @click="isMobileMenuOpen = !isMobileMenuOpen" class="md:hidden p-2 cursor-pointer text-gray-400 hover:text-white transition-colors">
             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path v-if="!isMobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
               <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -120,8 +120,8 @@
             <NuxtLink to="/register" @click="isMobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-indigo-400 hover:text-indigo-300 hover:bg-white/5 rounded-lg transition-all">Get Started</NuxtLink>
           </template>
           <template v-else>
-            <div class="px-3 py-3 border-t border-white/10 mt-2">
-              <div class="flex items-center justify-between mb-3">
+            <div class="px-3 py-3 border-t border-white/10 mt-2 space-y-3">
+              <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
                   <div class="h-10 w-10 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center overflow-hidden">
                     <img v-if="user?.photoURL" :src="user.photoURL" :alt="user.displayName || user.name" class="h-full w-full object-cover" />

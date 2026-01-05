@@ -35,7 +35,7 @@
         <button 
           @click="handleGoogleSignIn"
           :disabled="signingIn || isLoading"
-          class="w-full relative overflow-hidden group/btn flex items-center justify-center gap-4 bg-white text-gray-950 font-black py-3 px-8 rounded-2xl transition-all hover:bg-indigo-50 hover:shadow-[0_0_50px_10px_rgba(99,102,241,0.4)] hover:-translate-y-1 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed"
+          class="w-full relative overflow-hidden group/btn flex items-center justify-center gap-4 bg-white text-gray-950 font-black py-3 px-8 rounded-2xl transition-all hover:bg-indigo-50 hover:shadow-[0_0_50px_10px_rgba(99,102,241,0.4)] hover:-translate-y-1 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           <template v-if="signingIn || isLoading">
             <svg class="animate-spin h-7 w-7 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

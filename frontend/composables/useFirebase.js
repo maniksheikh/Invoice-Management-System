@@ -10,7 +10,7 @@ import {
     isSupported,
 } from "firebase/analytics";
 import { useMainStore } from "~/stores/index.js";
-import { onMounted, watch } from "vue";
+import { onMounted, watch, markRaw } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 // Firebase configuration
@@ -27,33 +27,31 @@ const firebaseConfig = {
 let app, auth, storage, db, analytics;
 let isInitialized = false;
 
+// Shared interval reference
+let tokenRefreshInterval;
+
 export default function () {
     const { $axios, $pinia } = useNuxtApp();
+    const axiosInstance = $axios;
     const store = useMainStore($pinia);
     const router = useRouter();
 
-    if (!isInitialized) {
+    if (process.client && !isInitialized) {
         app = initializeApp(firebaseConfig);
         auth = getAuth(app);
         storage = getStorage(app);
         db = getFirestore(app);
-
-        // Check if Firebase Analytics is supported
         isSupported().then((supported) => {
             if (supported) {
                 analytics = getAnalytics(app);
-            } else {
-                console.log("Firebase Analytics is not supported in this environment");
             }
         });
 
-        let tokenRefreshInterval;
-
         auth.onAuthStateChanged(async (user) => {
             if (user) {
-                // Initialize or update the user in the store
                 if (!store.user) {
-                    store.setUser(user);
+                    // markRaw prevents Vue from making this reactive, avoiding cross-origin errors
+                    store.setUser(markRaw(user));
                     try {
                         const details = await store.getUserDetails(user.email);
                         if (details) {
@@ -67,55 +65,65 @@ export default function () {
                     }
                 }
 
-                // Set the ID token in Axios headers immediately
-                refreshAndSetIdToken();
+                // Immediately refresh and set up interval
+                try {
+                    await refreshAndSetIdToken(user);
+                } catch (e) {
+                    console.error("Initial token refresh failed:", e);
+                }
 
-                // Set up or refresh the token refresh interval
-                clearInterval(tokenRefreshInterval);
-                tokenRefreshInterval = setInterval(() => {
-                    refreshAndSetIdToken();
-                }, 55 * 60 * 1000); // Refresh token every 55 minutes
+                if (tokenRefreshInterval) clearInterval(tokenRefreshInterval);
+                tokenRefreshInterval = setInterval(async () => {
+                    const currentUser = getAuth().currentUser;
+                    if (currentUser) {
+                        await refreshAndSetIdToken(currentUser);
+                    }
+                }, 55 * 60 * 1000);
             } else {
-                // User is signed out, clear the interval and reset the store
-                clearInterval(tokenRefreshInterval);
+                if (tokenRefreshInterval) clearInterval(tokenRefreshInterval);
                 store.setUser(null);
                 store.setUserDetails(null);
-                // Optionally, clear the Authorization header
-                $axios.defaults.headers.common["Authorization"] = "";
+                if (axiosInstance) {
+                    axiosInstance.defaults.headers.common["Authorization"] = "";
+                }
             }
-
-            // Crucial: Set loading to false after the auth state is determined
             store.setUserLoading(false);
         });
 
-        async function refreshAndSetIdToken() {
-            try {
-                const currentUser = auth.currentUser;
-                if (currentUser) {
-                    const idToken = await currentUser.getIdToken(true);
-                    $axios.defaults.headers.common["Authorization"] = `Bearer ${idToken}`;
-                }
-            } catch (error) {
-                console.error("Error refreshing ID token:", error);
-            }
-        }
-
         isInitialized = true;
+    }
+
+    async function refreshAndSetIdToken(user) {
+        if (!user) return;
+        try {
+            const idToken = await user.getIdToken(true);
+            const app = useNuxtApp();
+            const currentAxios = app.$axios || axiosInstance;
+
+            if (currentAxios) {
+                currentAxios.defaults.headers.common["Authorization"] = `Bearer ${idToken}`;
+                console.log("Auth: ID Token refreshed and set in Axios");
+            } else {
+                console.warn("Auth: Axios instance not found during token refresh");
+            }
+        } catch (error) {
+            console.error("Error refreshing ID token:", error);
+        }
     }
 
     const provider = () => new GoogleAuthProvider();
 
     onMounted(() => {
-        const route = useRoute();
-        watch(
-            route,
-            (to) => {
-                if (analytics) {
-                    logEvent(analytics, "page_view", { page_path: to.path });
-                }
-            },
-            { immediate: true }
-        );
+        if (analytics) {
+            const route = useRoute();
+            watch(
+                () => route.path,
+                (newPath) => {
+                    logEvent(analytics, "page_view", { page_path: newPath });
+                },
+                { immediate: true }
+            );
+        }
     });
 
     // Function to log events
@@ -125,5 +133,5 @@ export default function () {
         }
     }
 
-    return { auth, provider, storage, eventLog, db };
+    return { auth, provider, storage, eventLog, db, refreshAndSetIdToken };
 }
