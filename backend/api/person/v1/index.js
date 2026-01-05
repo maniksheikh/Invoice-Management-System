@@ -61,13 +61,19 @@ router.post('/login', async (req, res) => {
 router.get('/details', async (req, res) => {
     try {
         const { email } = req.query;
+        console.log(`Backend: Fetching details for email: ${email}`);
         if (!email) return res.status(400).json({ message: 'Email is required' });
 
         const person = await Person.findOne({ email });
-        if (!person) return res.status(404).json({ message: 'Person not found' });
+        if (!person) {
+            console.log(`Backend: Person not found for email: ${email}`);
+            return res.status(404).json({ message: 'Person not found' });
+        }
 
+        console.log(`Backend: Person found: ${person.email}`);
         res.json(person);
     } catch (error) {
+        console.error(`Backend: Error fetching person details: ${error.message}`);
         res.status(500).json({ message: 'Error fetching person details', error: error.message });
     }
 });
