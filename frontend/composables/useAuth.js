@@ -1,73 +1,151 @@
-export const useAuth = () => {
-    const user = useState('auth_user', () => null)
-    const token = useState('auth_token', () => null)
-    const config = useRuntimeConfig()
+import { useMainStore } from "~/stores/index.js";
 
-    const isLoggedIn = computed(() => !!token.value)
+import {
+    applyActionCode,
+    confirmPasswordReset,
+    createUserWithEmailAndPassword,
+    sendEmailVerification,
+    sendPasswordResetEmail,
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    updatePassword,
+    verifyPasswordResetCode,
+} from "firebase/auth";
 
-    // Initialize from localStorage (client-side only)
-    if (process.client) {
-        const savedToken = localStorage.getItem('auth_token')
-        const savedUser = localStorage.getItem('auth_user')
-        if (savedToken && savedUser) {
-            token.value = savedToken
-            user.value = JSON.parse(savedUser)
-        }
-    }
+export default function useAuth() {
+    const { $pinia, $toast } = useNuxtApp();
+    const store = useMainStore($pinia);
+    const { auth, provider, eventLog } = useFirebase();
 
-    const login = async (email, password) => {
+    async function signInWithGoogle() {
         try {
-            const { data, error } = await useFetch(`${config.public.apiBase}/person/v1/login`, {
-                method: 'POST',
-                body: { email, password }
-            })
+            store.setUserLoading(true);
+            const userCredential = await signInWithPopup(auth, provider());
+            const user = userCredential.user;
+            store.setUser(user);
 
-            if (error.value) throw error.value
-
-            token.value = data.value.token
-            user.value = data.value.person
-
-            if (process.client) {
-                localStorage.setItem('auth_token', data.value.token)
-                localStorage.setItem('auth_user', JSON.stringify(data.value.person))
+            const response = await store.getUserDetails(user.email);
+            if (!response) {
+                const payload = {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName,
+                    isVerified: true,
+                    photoURL: user.photoURL,
+                };
+                await store.postUserDetails(payload);
+                store.setUserDetails(payload);
             }
-
-            return data.value
-        } catch (err) {
-            throw new Error(err.data?.message || err.message || 'Login failed')
+            return { success: true, user: response || user };
+        } catch (error) {
+            store.setUserLoading(false);
+            throw error;
         }
     }
 
-    const register = async (name, email, password) => {
+    async function signUpWithEmail(email, password, displayName) {
+        const response = await store.getUserDetails(email);
+
+        if (response) {
+            throw new Error("User already exists. Please Sign In.");
+        } else {
+            const userCredential = await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password,
+                displayName
+            );
+            const user = userCredential.user;
+
+            await sendEmailVerification(auth.currentUser);
+
+            const payload = {
+                uid: user.uid,
+                email: user.email,
+                displayName: displayName,
+                isVerified: false,
+                photoURL: user.providerData[0]?.photoURL || null,
+            };
+            store.setUser(user);
+            store.postUserDetails(payload);
+            $toast(
+                "A verification email has been send to your email. To sign in verify your email first."
+            );
+        }
+    }
+    async function signInWithEmail(payload) {
         try {
-            const { data, error } = await useFetch(`${config.public.apiBase}/person/v1/register`, {
-                method: 'POST',
-                body: { name, email, password }
-            })
+            store.setUserLoading(true);
+            const userCredential = await signInWithEmailAndPassword(
+                auth,
+                payload.email,
+                payload.password
+            );
 
-            if (error.value) throw error.value
-            return data.value
-        } catch (err) {
-            throw new Error(err.data?.message || err.message || 'Registration failed')
+            const user = userCredential.user;
+            store.setUser(user);
+
+            const userDetails = await store.getUserDetails(user.email);
+            if (userDetails && userDetails.isVerified) {
+                // Ensure userDetails has the latest photoURL from Firebase if it's missing
+                if (!userDetails.photoURL && user.photoURL) {
+                    userDetails.photoURL = user.photoURL;
+                    store.setUserDetails(userDetails);
+                }
+                return { success: true, user: userDetails };
+            } else {
+                await sendEmailVerification(auth.currentUser);
+                throw new Error(
+                    "You need to verify your email first. We have sent you a verification email to your email address."
+                );
+            }
+        } catch (error) {
+            store.setUserLoading(false);
+            throw error;
         }
     }
+    async function forgetPassword(email) {
+        await sendPasswordResetEmail(auth, email);
+    }
+    async function verifyEmail(actionCode) {
+        await applyActionCode(auth, actionCode);
+    }
+    async function setNewPassword(payload) {
+        const password = payload.password;
+        const actionCode = payload.oobCode;
+        await verifyPasswordResetCode(auth, actionCode).then((email) => {
+            const accountEmail = email;
+            confirmPasswordReset(auth, actionCode, password);
+        });
+    }
+    async function changePassword(newPassword) {
+        const user = auth.currentUser;
+        await updatePassword(user, newPassword);
+    }
 
-    const logout = () => {
-        token.value = null
-        user.value = null
-        if (process.client) {
-            localStorage.removeItem('auth_token')
-            localStorage.removeItem('auth_user')
-        }
-        navigateTo('/login')
+    function logout() {
+        auth
+            .signOut()
+            .then(() => {
+                store.setUser(null);
+                store.setUserDetails(null);
+                return navigateTo("/");
+            })
+            .catch((e) => {
+                console.error(e);
+            });
     }
 
     return {
-        user,
-        token,
-        isLoggedIn,
-        login,
-        register,
-        logout
-    }
+        signInWithGoogle,
+        logout,
+        signUpWithEmail,
+        signInWithEmail,
+        forgetPassword,
+        setNewPassword,
+        changePassword,
+        verifyEmail,
+        user: computed(() => store.user),
+        isLoggedIn: computed(() => !!store.user),
+    };
 }

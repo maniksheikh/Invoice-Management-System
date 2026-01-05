@@ -89,9 +89,9 @@
 
 <script setup>
 const navLinks = [
-  { label: 'Dashboards', to: '/dashboard' },
+  { label: 'Dashboard', to: '/' },
   { label: 'Invoices', to: '/invoices' },
-  { label: 'Statistics', to: '/stats' },
+  // { label: 'Statistics', to: '/stats' },
 ]
 
 const { isLoggedIn, user, logout } = useAuth()
