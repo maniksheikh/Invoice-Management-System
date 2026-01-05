@@ -18,14 +18,18 @@ export default function useAuth() {
     const { auth, provider, eventLog } = useFirebase();
 
     async function signInWithGoogle() {
+        console.log('Auth Composable: signInWithGoogle started');
         try {
             store.setUserLoading(true);
             const userCredential = await signInWithPopup(auth, provider());
             const user = userCredential.user;
+            console.log('Auth Composable: Firebase sign-in successful', user.email);
+
             store.setUser(user);
 
             const response = await store.getUserDetails(user.email);
             if (!response) {
+                console.log('Auth Composable: New user, creating profile...');
                 const payload = {
                     uid: user.uid,
                     email: user.email,
@@ -35,9 +39,14 @@ export default function useAuth() {
                 };
                 await store.postUserDetails(payload);
                 store.setUserDetails(payload);
+            } else {
+                console.log('Auth Composable: Existing user found');
+                store.setUserDetails(response);
             }
+            store.setUserLoading(false);
             return { success: true, user: response || user };
         } catch (error) {
+            console.error('Auth Composable: Google sign-in error', error);
             store.setUserLoading(false);
             throw error;
         }

@@ -96,7 +96,7 @@
 </template>
 
 <script setup>
-const { register } = useAuth()
+const { signUpWithEmail } = useAuth()
 const form = reactive({
   name: '',
   email: '',
@@ -113,7 +113,7 @@ const handleRegister = async () => {
   success.value = null
   
   try {
-    await register(form.name, form.email, form.password)
+    await signUpWithEmail(form.name, form.email, form.password)
     success.value = 'Account created successfully! Redirecting to login...'
     setTimeout(() => {
       navigateTo('/login')

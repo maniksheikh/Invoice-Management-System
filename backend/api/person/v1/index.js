@@ -57,6 +57,39 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// Get Person Details
+router.get('/details', async (req, res) => {
+    try {
+        const { email } = req.query;
+        if (!email) return res.status(400).json({ message: 'Email is required' });
+
+        const person = await Person.findOne({ email });
+        if (!person) return res.status(404).json({ message: 'Person not found' });
+
+        res.json(person);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching person details', error: error.message });
+    }
+});
+
+// Update/Create Person Details (Param)
+router.post('/param', async (req, res) => {
+    try {
+        const { email, ...details } = req.body;
+        if (!email) return res.status(400).json({ message: 'Email is required' });
+
+        const person = await Person.findOneAndUpdate(
+            { email },
+            { $set: details },
+            { new: true, upsert: true }
+        );
+
+        res.json({ message: 'Person details updated successfully', person });
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating person details', error: error.message });
+    }
+});
+
 // Logout Person
 router.post('/logout', (req, res) => {
     res.json({ message: 'Logged out successfully' });

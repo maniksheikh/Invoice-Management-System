@@ -26,8 +26,8 @@ app.use(
   })
 );
 
-app.use("/api", require("./api/person"));
-app.use("/api", require("./api/invoice"));
+app.use("/api/person", require("./api/person"));
+app.use("/api/invoice", require("./api/invoice"));
 
 // Update the global error handling middleware
 app.use(async (err, req, res, next) => {

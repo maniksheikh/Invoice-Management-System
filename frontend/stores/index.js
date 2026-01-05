@@ -18,9 +18,10 @@ export const useMainStore = defineStore('main', {
         },
         async getUserDetails(email) {
             try {
-                const data = await $fetch(`/api/person/v1/details`, {
-                    query: { email }
-                }).catch(() => null);
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get(`/person/v1/details`, {
+                    params: { email }
+                })
                 return data;
             } catch (error) {
                 console.warn('Failed to fetch user details:', error);
@@ -29,12 +30,10 @@ export const useMainStore = defineStore('main', {
         },
         async postUserDetails(payload) {
             try {
-                await $fetch('/api/person/v1/param', {
-                    method: 'POST',
-                    body: payload
-                }).catch(() => null);
+                const { $axios } = useNuxtApp()
+                await $axios.post('/person/v1/param', payload);
             } catch (error) {
-                console.warn('Failed to post user details:', error);
+                console.warn('Failed to post user details:', error.response?.data || error.message);
             }
         }
     },

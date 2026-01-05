@@ -84,7 +84,7 @@
 </template>
 
 <script setup>
-const { login } = useAuth()
+const { signInWithEmail } = useAuth()
 const form = reactive({
   email: '',
   password: ''
@@ -98,7 +98,7 @@ const handleLogin = async () => {
   error.value = null
   
   try {
-    await login(form.email, form.password)
+    await signInWithEmail({ email: form.email, password: form.password })
     navigateTo('/invoices')
   } catch (err) {
     error.value = err.message

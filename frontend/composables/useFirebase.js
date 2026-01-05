@@ -55,7 +55,10 @@ export default function () {
                 if (!store.user) {
                     store.setUser(user);
                     try {
-                        await store.getUserDetails();
+                        const details = await store.getUserDetails(user.email);
+                        if (details) {
+                            store.setUserDetails(details);
+                        }
                     } catch (error) {
                         console.error("Error getting user details:", error);
                     }
