@@ -26,7 +26,7 @@
               <div class="absolute left-0 top-full mt-1 hidden group-hover/status:block z-50 bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden min-w-[120px]">
                 <button v-for="s in ['paid', 'unpaid', 'overdue']" :key="s" 
                   @click="updateStatus(s)"
-                  class="w-full text-left px-4 py-2 text-xs font-semibold uppercase tracking-wider hover:bg-white/5 transition-colors"
+                  class="w-full text-left px-4 py-2 text-xs font-semibold uppercase tracking-wider hover:bg-white/5 transition-colors cursor-pointer"
                   :class="s === invoice?.status ? 'text-indigo-400' : 'text-gray-400'"
                 >
                   {{ s }}
@@ -39,7 +39,7 @@
         <div class="flex items-center gap-3">
           <button 
             @click="openEditModal"
-            class="flex-1 md:flex-none flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white px-6 py-2.5 rounded-xl font-semibold border border-white/10 transition-all"
+            class="flex-1 md:flex-none flex items-center cursor-pointer justify-center gap-2 bg-white/5 hover:bg-white/10 text-white px-6 py-2.5 rounded-xl font-semibold border border-white/10 transition-all"
           >
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -48,7 +48,7 @@
           </button>
           <button 
             @click="handlePrint"
-            class="flex-1 md:flex-none flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white px-6 py-2.5 rounded-xl font-semibold border border-white/10 transition-all"
+            class="flex-1 md:flex-none flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white px-6 py-2.5 rounded-xl font-semibold border border-white/10 transition-all cursor-pointer"
           >
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -57,7 +57,7 @@
           </button>
           <button 
             @click="confirmDelete"
-            class="flex-1 md:flex-none flex items-center justify-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 px-6 py-2.5 rounded-xl font-semibold border border-rose-500/20 transition-all"
+            class="flex-1 md:flex-none flex items-center cursor-pointer justify-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 px-6 py-2.5 rounded-xl font-semibold border border-rose-500/20 transition-all"
           >
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -189,10 +189,10 @@
         <p class="text-gray-400 text-center mb-6">Are you sure you want to delete this invoice? This action cannot be undone.</p>
         
         <div class="flex gap-3">
-          <button @click="showDeleteModal = false" class="flex-1 px-4 py-3 rounded-xl border border-white/10 text-gray-400 hover:bg-white/5 transition-colors font-medium">
+          <button @click="showDeleteModal = false" class="flex-1 px-4 py-3 rounded-xl border border-white/10 text-gray-400 hover:bg-white/5 transition-colors font-medium cursor-pointer">
             Cancel
           </button>
-          <button @click="handleDelete" :disabled="deleting" class="flex-1 bg-rose-500 hover:bg-rose-400 disabled:opacity-50 text-white py-3 rounded-xl font-bold transition-all shadow-lg shadow-rose-500/20">
+          <button @click="handleDelete" :disabled="deleting" class="flex-1 bg-rose-500 hover:bg-rose-400 disabled:opacity-50 text-white py-3 rounded-xl font-bold transition-all shadow-lg shadow-rose-500/20 cursor-pointer disabled:cursor-not-allowed">
             {{ deleting ? 'Deleting...' : 'Yes, Delete' }}
           </button>
         </div>
@@ -233,10 +233,10 @@
           </div>
 
           <div class="flex gap-3 pt-4">
-            <button type="button" @click="showEditModal = false" class="flex-1 px-4 py-2 rounded-xl border border-white/10 text-gray-400 hover:bg-white/5 transition-colors font-medium">
+            <button type="button" @click="showEditModal = false" class="flex-1 px-4 py-2 rounded-xl border border-white/10 text-gray-400 hover:bg-white/5 transition-colors font-medium cursor-pointer">
               Cancel
             </button>
-            <button type="submit" :disabled="updating" class="flex-1 bg-indigo-500 hover:bg-indigo-400 disabled:opacity-50 text-white py-2 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20">
+            <button type="submit" :disabled="updating" class="flex-1 bg-indigo-500 hover:bg-indigo-400 disabled:opacity-50 text-white py-2 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20 cursor-pointer disabled:cursor-not-allowed">
               {{ updating ? 'Saving...' : 'Save Changes' }}
             </button>
           </div>

@@ -45,16 +45,22 @@
                 </svg>
               </div>
               <p class="text-sm text-gray-400 mb-2">Click to upload invoice image</p>
-              <p class="text-xs text-gray-500">SVG, PNG, JPG allowed</p>
+              <p class="text-xs text-gray-500">SVG, PNG, JPG, WEBP allowed</p>
             </label>
           </div>
 
           <div class="flex justify-end gap-4">
+            <NuxtLink 
+              to="/invoices" 
+              class="px-6 py-3 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white transition-all font-bold shadow-lg shadow-indigo-500/20 cursor-pointer"
+            >
+              View Invoices
+            </NuxtLink>
             <button 
               @click="navigateTo('/invoices')" 
-              class="px-6 py-3 rounded-xl border border-white/10 text-gray-400 hover:bg-white/5 transition-all font-medium"
+              class="px-6 py-3 rounded-xl border border-white/10 text-gray-400 hover:bg-white/5 transition-all font-medium cursor-pointer"
             >
-              Skip for now
+              Skip upload
             </button>
           </div>
         </div>
@@ -146,14 +152,14 @@
               <button 
                 type="button" 
                 @click="navigateTo('/invoices')" 
-                class="flex-1 px-6 py-3 rounded-xl border border-white/10 text-gray-400 hover:bg-white/5 transition-all font-medium text-center"
+                class="flex-1 px-6 py-3 rounded-xl border border-white/10 text-gray-400 hover:bg-white/5 transition-all font-medium text-center cursor-pointer"
               >
                 Cancel
               </button>
               <button 
                 type="submit" 
                 :disabled="submitting" 
-                class="flex-1 bg-indigo-500 hover:bg-indigo-400 disabled:opacity-50 text-white py-3 rounded-xl font-bold transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-2"
+                class="flex-1 bg-indigo-500 hover:bg-indigo-400 disabled:opacity-50 text-white py-3 rounded-xl font-bold transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed"
               >
                 <svg v-if="submitting" class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -176,6 +182,15 @@ definePageMeta({
 
 const config = useRuntimeConfig()
 const createdInvoice = ref(null)
+const submitting = ref(false)
+
+const form = ref({
+  number: '',
+  date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+  client: '',
+  amount: 0,
+  status: 'unpaid'
+})
 
 const handleImageUpload = async (event) => {
   const file = event.target.files[0]
@@ -186,17 +201,15 @@ const handleImageUpload = async (event) => {
 
   try {
     submitting.value = true
-    const { error } = await useFetch(`${config.public.apiBase}/invoice/v1/${createdInvoice.value._id}/upload`, {
+    await $fetch(`${config.public.apiBase}/invoice/v1/${createdInvoice.value._id}/upload`, {
       method: 'POST',
       body: formData
     })
 
-    if (error.value) throw new Error(error.value.message || 'Failed to upload image')
-
     navigateTo('/invoices')
   } catch (err) {
     console.error('Error uploading image:', err)
-    alert('Failed to upload image: ' + err.message)
+    alert('Failed to upload image: ' + (err.data?.message || err.message))
   } finally {
     submitting.value = false
   }
@@ -209,22 +222,21 @@ const handleSubmit = async () => {
     // Validate amount
     if (form.value.amount <= 0) {
       alert('Please enter a valid amount')
+      submitting.value = false
       return
     }
 
-    const { data, error } = await useFetch(`${config.public.apiBase}/invoice/v1`, {
+    const { invoice } = await $fetch(`${config.public.apiBase}/invoice/v1`, {
       method: 'POST',
       body: form.value
     })
 
-    if (error.value) {
-      throw new Error(error.value.message || 'Failed to create invoice')
-    }
-
-    createdInvoice.value = data.value.invoice
+    createdInvoice.value = invoice
   } catch (err) {
     console.error('Error creating invoice:', err)
-    alert('Failed to create invoice: ' + err.message)
+    const errorMsg = err.data?.message || err.message
+    alert('Failed to create invoice: ' + errorMsg)
+  } finally {
     submitting.value = false
   }
 }
