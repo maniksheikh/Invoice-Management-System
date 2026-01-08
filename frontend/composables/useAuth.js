@@ -160,6 +160,7 @@ export default function useAuth() {
         changePassword,
         verifyEmail,
         user: computed(() => store.user),
+        userDetails: computed(() => store.userDetails),
         isLoggedIn: computed(() => !!store.user),
     };
 }
