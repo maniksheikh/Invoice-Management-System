@@ -77,7 +77,6 @@ const signingIn = ref(false)
 
 const isLoading = computed(() => store.loading)
 
-// Watch for login success to trigger redirection even if handleGoogleSignIn is interrupted
 watch(isLoggedIn, (newVal) => {
   if (newVal) {
     console.log('Auth state changed: isLoggedIn = true, redirecting...')
@@ -89,7 +88,6 @@ watch(isLoggedIn, (newVal) => {
 
 const handleGoogleSignIn = async () => {
   if (signingIn.value) return
-  
   signingIn.value = true
   console.log('Initiating Google Sign-In...')
   
@@ -107,6 +105,7 @@ const handleGoogleSignIn = async () => {
     signingIn.value = false
   }
 }
+
 </script>
 
 <style scoped>
