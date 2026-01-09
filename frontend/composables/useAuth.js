@@ -25,9 +25,6 @@ export default function useAuth() {
             const userCredential = await signInWithPopup(auth, provider());
             const user = userCredential.user;
             console.log('Auth Composable: Firebase sign-in successful', user.email);
-
-            // markRaw prevents Vue reactivity on Firebase user objects
-            // This avoids SecurityError from cross-origin popup window access
             store.setUser(markRaw(user));
 
             const response = await store.getUserDetails(user.email);
@@ -57,7 +54,6 @@ export default function useAuth() {
 
     async function signUpWithEmail(email, password, displayName) {
         const response = await store.getUserDetails(email);
-
         if (response) {
             throw new Error("User already exists. Please Sign In.");
         } else {
@@ -70,7 +66,6 @@ export default function useAuth() {
             const user = userCredential.user;
 
             await sendEmailVerification(auth.currentUser);
-
             const payload = {
                 uid: user.uid,
                 email: user.email,
@@ -99,7 +94,6 @@ export default function useAuth() {
 
             const userDetails = await store.getUserDetails(user.email);
             if (userDetails && userDetails.isVerified) {
-                // Ensure userDetails has the latest photoURL from Firebase if it's missing
                 if (!userDetails.photoURL && user.photoURL) {
                     userDetails.photoURL = user.photoURL;
                     store.setUserDetails(userDetails);
