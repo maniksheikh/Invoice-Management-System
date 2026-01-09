@@ -43,7 +43,6 @@
                     <span v-else class="text-sm font-bold text-indigo-400">{{ (user?.displayName || user?.name || 'U')?.charAt(0)?.toUpperCase() }}</span>
                   </div>
                 </button>
-
                 <!-- Dropdown Menu -->
                 <transition
                   enter-active-class="transition duration-100 ease-out"
@@ -57,7 +56,7 @@
                     <div class="px-4 py-3 border-b border-white/5">
                       <p class="text-sm text-white font-medium truncate">{{ user?.email }}</p>
                     </div>
-                    
+  
                     <div class="py-1">
                       <NuxtLink to="/profile" @click="isProfileMenuOpen = false" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -151,7 +150,6 @@
 const navLinks = [
   { label: 'Dashboard', to: '/' },
   { label: 'Invoices', to: '/invoices' },
-  // { label: 'Statistics', to: '/stats' },
 ]
 
 const { isLoggedIn, user, logout } = useAuth()
@@ -167,4 +165,5 @@ onMounted(() => {
     }
   })
 })
+
 </script>
