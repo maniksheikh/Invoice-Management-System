@@ -27,7 +27,6 @@ const firebaseConfig = {
 let app, auth, storage, db, analytics;
 let isInitialized = false;
 
-// Shared interval reference
 let tokenRefreshInterval;
 
 export default function () {
@@ -50,7 +49,6 @@ export default function () {
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 if (!store.user) {
-                    // markRaw prevents Vue from making this reactive, avoiding cross-origin errors
                     store.setUser(markRaw(user));
                     try {
                         const details = await store.getUserDetails(user.email);
@@ -71,7 +69,6 @@ export default function () {
                 } catch (e) {
                     console.error("Initial token refresh failed:", e);
                 }
-
                 if (tokenRefreshInterval) clearInterval(tokenRefreshInterval);
                 tokenRefreshInterval = setInterval(async () => {
                     const currentUser = getAuth().currentUser;
@@ -89,7 +86,6 @@ export default function () {
             }
             store.setUserLoading(false);
         });
-
         isInitialized = true;
     }
 
@@ -99,7 +95,6 @@ export default function () {
             const idToken = await user.getIdToken(true);
             const app = useNuxtApp();
             const currentAxios = app.$axios || axiosInstance;
-
             if (currentAxios) {
                 currentAxios.defaults.headers.common["Authorization"] = `Bearer ${idToken}`;
                 console.log("Auth: ID Token refreshed and set in Axios");
@@ -132,6 +127,5 @@ export default function () {
             logEvent(analytics, event_name, payload);
         }
     }
-
     return { auth, provider, storage, eventLog, db, refreshAndSetIdToken };
 }
