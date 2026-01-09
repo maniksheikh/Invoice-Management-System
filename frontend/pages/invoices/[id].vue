@@ -319,11 +319,9 @@ const handleDelete = async () => {
   try {
     deleting.value = true
     const { error: delError } = await useFetch(`${config.public.apiBase}/invoice/v1/${route.params.id}`, {
-      method: 'DELETE'
-    })
+      method: 'DELETE' })
 
     if (delError.value) throw delError.value
-
     showDeleteModal.value = false
     navigateTo('/invoices')
   } catch (err) {
@@ -340,7 +338,6 @@ const updateStatus = async (status) => {
       method: 'PATCH',
       body: { status }
     })
-
     if (patchError.value) throw patchError.value
     await refresh()
   } catch (err) {
@@ -353,6 +350,7 @@ const updateStatus = async (status) => {
 useHead({
   title: `Invoice Details - InvoiceAI`,
 })
+
 </script>
 
 <style scoped>

@@ -176,6 +176,7 @@
 </template>
 
 <script setup>
+
 definePageMeta({
   middleware: ['auth']
 })
@@ -205,7 +206,6 @@ const handleImageUpload = async (event) => {
       method: 'POST',
       body: formData
     })
-
     navigateTo('/invoices')
   } catch (err) {
     console.error('Error uploading image:', err)
@@ -218,19 +218,15 @@ const handleImageUpload = async (event) => {
 const handleSubmit = async () => {
   try {
     submitting.value = true
-    
-    // Validate amount
-    if (form.value.amount <= 0) {
+      if (form.value.amount <= 0) {
       alert('Please enter a valid amount')
       submitting.value = false
       return
     }
-
     const { invoice } = await $fetch(`${config.public.apiBase}/invoice/v1`, {
       method: 'POST',
       body: form.value
     })
-
     createdInvoice.value = invoice
   } catch (err) {
     console.error('Error creating invoice:', err)
@@ -244,6 +240,7 @@ const handleSubmit = async () => {
 useHead({
   title: 'Create Invoice - InvoiceAI',
 })
+
 </script>
 
 <style scoped>
