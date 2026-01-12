@@ -80,6 +80,7 @@ export default function useAuth() {
             );
         }
     }
+    
     async function signInWithEmail(payload) {
         try {
             store.setUserLoading(true);
