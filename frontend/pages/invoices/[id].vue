@@ -289,9 +289,7 @@ const handleUpdate = async () => {
       method: 'PUT',
       body: editForm.value
     })
-
     if (patchError.value) throw patchError.value
-    
     showEditModal.value = false
     await refresh()
   } catch (err) {
@@ -320,7 +318,6 @@ const handleDelete = async () => {
     deleting.value = true
     const { error: delError } = await useFetch(`${config.public.apiBase}/invoice/v1/${route.params.id}`, {
       method: 'DELETE' })
-
     if (delError.value) throw delError.value
     showDeleteModal.value = false
     navigateTo('/invoices')
