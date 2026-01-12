@@ -18,6 +18,7 @@ export const useMainStore = defineStore('main', {
         setUserLoading(loading) {
             this.loading = loading
         },
+        
         async getUserDetails(email) {
             try {
                 const { $axios } = useNuxtApp()
@@ -37,7 +38,7 @@ export const useMainStore = defineStore('main', {
                 return null;
             }
         },
-        
+
         async postUserDetails(payload) {
             try {
                 const { $axios } = useNuxtApp()
