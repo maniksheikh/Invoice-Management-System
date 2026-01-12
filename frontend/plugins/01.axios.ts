@@ -14,7 +14,6 @@ export default defineNuxtPlugin((nuxtApp) => {
                 const { getAuth } = await import("firebase/auth");
                 const auth = getAuth();
                 const user = auth.currentUser;
-
                 if (user) {
                     const token = await user.getIdToken();
                     config.headers.Authorization = `Bearer ${token}`;

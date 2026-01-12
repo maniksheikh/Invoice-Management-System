@@ -76,7 +76,6 @@ const store = useMainStore()
 const signingIn = ref(false)
 
 const isLoading = computed(() => store.loading)
-
 watch(isLoggedIn, (newVal) => {
   if (newVal) {
     console.log('Auth state changed: isLoggedIn = true, redirecting...')

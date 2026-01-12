@@ -7,10 +7,9 @@ export const useMainStore = defineStore('main', {
         userDetails: null,
         loading: false,
     }),
+
     actions: {
         setUser(user) {
-            // Use markRaw to prevent Vue from making Firebase user objects reactive
-            // This prevents SecurityError when Firebase popup tries to access cross-origin properties
             this.user = user ? markRaw(user) : null
         },
         setUserDetails(details) {
@@ -38,6 +37,7 @@ export const useMainStore = defineStore('main', {
                 return null;
             }
         },
+        
         async postUserDetails(payload) {
             try {
                 const { $axios } = useNuxtApp()
