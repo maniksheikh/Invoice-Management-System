@@ -157,13 +157,9 @@ const saveProfile = async () => {
       email: user.value.email,
       displayName: editedUser.value.displayName
     }
-    
     await store.postUserDetails(payload)
-    
-    // Refresh user details in store
     const updatedDetails = await store.getUserDetails(user.value.email)
     store.setUserDetails(updatedDetails)
-    
     isEditing.value = false
   } catch (error) {
     console.error('Error saving profile:', error)
@@ -173,7 +169,6 @@ const saveProfile = async () => {
 }
 
 const changePlan = () => {
-  // Placeholder for plan changing
   console.log('Change plan clicked')
 }
 
