@@ -6,7 +6,7 @@
       <NuxtPage />
     </div>
     <!-- Global Auth Overlay -->
-    <AuthOverlay />
+    <!-- <AuthOverlay /> -->
   </div>
 </template>
 
