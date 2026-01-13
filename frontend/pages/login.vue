@@ -70,6 +70,30 @@
           </button>
         </div>
 
+        <div class="mt-6">
+          <div class="relative">
+            <div class="absolute inset-0 flex items-center">
+              <div class="w-full border-t border-gray-300"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+              <span class="px-2 bg-white/5 text-gray-400">Or continue with</span>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <button
+              type="button"
+              @click="handleGoogleSignIn"
+              class="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-gray-900 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-gray-500/20 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+            >
+              <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.24 10.285V14.4h6.806c-.275 1.767-2.087 5.97-6.806 5.97-4.119 0-7.437-3.34-7.437-7.468 0-4.127 3.318-7.466 7.437-7.466 2.091 0 3.839.715 5.206 2.072l3.056-3.057C19.451 3.697 16.865 2 12.24 2c-6.582 0-11.92 5.335-11.92 11.917 0 6.582 5.338 11.919 11.92 11.919 7.115 0 11.518-4.912 11.518-11.643 0-.78-.086-1.495-.199-2.198H12.24z"/>
+              </svg>
+              Sign in with Google
+            </button>
+          </div>
+        </div>
+
         <div class="text-center">
           <p class="text-sm text-gray-400">
             Don't have an account? 
@@ -84,7 +108,7 @@
 </template>
 
 <script setup>
-const { signInWithEmail } = useAuth()
+const { signInWithEmail, signInWithGoogle } = useAuth()
 const form = reactive({
   email: '',
   password: ''
@@ -99,6 +123,19 @@ const handleLogin = async () => {
   
   try {
     await signInWithEmail({ email: form.email, password: form.password })
+    navigateTo('/invoices')
+  } catch (err) {
+    error.value = err.message
+  } finally {
+    loading.value = false
+  }
+}
+
+const handleGoogleSignIn = async () => {
+  loading.value = true
+  error.value = null
+  try {
+    await signInWithGoogle()
     navigateTo('/invoices')
   } catch (err) {
     error.value = err.message
