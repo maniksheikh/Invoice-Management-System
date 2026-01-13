@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
 
@@ -38,6 +38,7 @@ export default function () {
     if (process.client && !isInitialized) {
         app = initializeApp(firebaseConfig);
         auth = getAuth(app);
+        setPersistence(auth, browserLocalPersistence); // Persist auth state
         storage = getStorage(app);
         db = getFirestore(app);
         isSupported().then((supported) => {
