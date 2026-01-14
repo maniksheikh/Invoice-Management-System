@@ -38,7 +38,7 @@ export default function () {
     if (process.client && !isInitialized) {
         app = initializeApp(firebaseConfig);
         auth = getAuth(app);
-        setPersistence(auth, browserLocalPersistence); // Persist auth state
+        setPersistence(auth, browserLocalPersistence);
         storage = getStorage(app);
         db = getFirestore(app);
         isSupported().then((supported) => {
@@ -64,7 +64,7 @@ export default function () {
                     }
                 }
 
-                // Immediately refresh and set up interval
+ // Immediately refresh and set up interval
                 try {
                     await refreshAndSetIdToken(user);
                 } catch (e) {
@@ -108,7 +108,6 @@ export default function () {
     }
 
     const provider = () => new GoogleAuthProvider();
-
     onMounted(() => {
         if (analytics) {
             const route = useRoute();
@@ -122,7 +121,7 @@ export default function () {
         }
     });
 
-    // Function to log events
+// Function to log events
     function eventLog(event_name, payload) {
         if (analytics) {
             logEvent(analytics, event_name, payload);
