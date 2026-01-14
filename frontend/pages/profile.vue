@@ -47,7 +47,6 @@
               <span v-else class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-sm font-medium border border-indigo-500/20">
                 Free Plan
               </span>
-
               <span v-if="userDetails?.isVerified" class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-sm font-medium border border-emerald-500/20">
                 Verified User
               </span>
@@ -130,6 +129,10 @@
 </template>
 
 <script setup>
+useHead({
+  title: 'Profile - InvoiceAI',
+})
+
 const { user, userDetails } = useAuth()
 const store = useMainStore()
 
@@ -178,7 +181,4 @@ const profileStats = ref([
   { label: 'Last Login', value: 'Today' }
 ])
 
-useHead({
-  title: 'Profile - InvoiceAI',
-})
 </script>
