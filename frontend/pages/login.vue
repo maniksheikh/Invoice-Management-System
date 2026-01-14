@@ -39,8 +39,7 @@
               type="email" 
               required 
               class="appearance-none relative block w-full px-4 py-3 border border-white/10 placeholder-gray-500 text-white rounded-xl bg-white/5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all sm:text-sm" 
-              placeholder="name@company.com" 
-            />
+              placeholder="name@company.com" />
           </div>
           <div>
             <div class="flex items-center justify-between mb-1">
@@ -63,8 +62,7 @@
           <button 
             type="submit" 
             :disabled="loading"
-            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-indigo-500 hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-indigo-500/20 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
-          >
+            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-indigo-500 hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-indigo-500/20 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
             <span v-if="loading">Signing in...</span>
             <span v-else>Sign in</span>
           </button>
@@ -84,8 +82,7 @@
             <button
               type="button"
               @click="handleGoogleSignIn"
-              class="w-full flex justify-center py-3 px-4 border border-white/20 text-sm font-bold rounded-xl text-white bg-white/5 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white/50 transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-gray-900/20 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
-            >
+              class="w-full flex justify-center py-3 px-4 border border-white/20 text-sm font-bold rounded-xl text-white bg-white/5 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white/50 transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-gray-900/20 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
               <svg class="w-5 h-5 mr-2" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" xmlns:xlink="http://www.w3.org/1999/xlink" style="display: block;">
                 <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
                 <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
@@ -113,6 +110,11 @@
 </template>
 
 <script setup>
+
+useHead({
+  title: 'Login - InvoiceAI',
+})
+
 const { signInWithEmail, signInWithGoogle } = useAuth()
 const form = reactive({
   email: '',
@@ -149,7 +151,4 @@ const handleGoogleSignIn = async () => {
   }
 }
 
-useHead({
-  title: 'Login - InvoiceAI',
-})
 </script>
