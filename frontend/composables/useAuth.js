@@ -111,6 +111,7 @@ export default function useAuth() {
             throw error;
         }
     }
+    
     async function forgetPassword(email) {
         await sendPasswordResetEmail(auth, email);
     }
