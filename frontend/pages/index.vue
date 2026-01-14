@@ -4,14 +4,12 @@
     <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
       <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)" />
     </div>
-
     <!-- Authenticated Dashboard -->
     <div v-if="isLoggedIn" class="mx-auto max-w-7xl px-6 pt-32 pb-24">
       <div class="mb-12">
         <h1 class="text-4xl font-bold text-white tracking-tight">Welcome back, {{ user?.name }}!</h1>
         <p class="mt-2 text-gray-400">Here's what's happening with your business today.</p>
       </div>
-
       <!-- Quick Stats -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         <div v-for="stat in dashboardStats" :key="stat.label" class="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl relative group hover:bg-white/10 transition-all">
@@ -23,13 +21,11 @@
           <p class="text-xs text-gray-500">{{ stat.description }}</p>
         </div>
       </div>
-
       <!-- Quick Actions -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <NuxtLink 
           to="/invoices/create"
-          class="flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white px-6 py-2.5 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg shadow-indigo-500/20"
-        >
+          class="flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white px-6 py-2.5 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg shadow-indigo-500/20">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
@@ -74,7 +70,6 @@
         </div>
       </div>
     </div>
-
     <!-- Guest Landing Page -->
     <div v-else class="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:items-center lg:gap-x-10 lg:px-8 lg:pt-40">
       <div class="mx-auto max-w-2xl shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
@@ -121,6 +116,14 @@
 </template>
 
 <script setup>
+
+useHead({
+  title: isLoggedIn.value ? 'Dashboard - InvoiceAI' : 'AI Invoice Management - Smart Billing',
+  meta: [
+    { name: 'description', content: 'The next generation of invoice management powered by AI.' }
+  ]
+})
+
 const { user, isLoggedIn } = useAuth()
 const config = useRuntimeConfig()
 
@@ -128,7 +131,6 @@ watch(isLoggedIn, (val) => {
   console.log('Index.vue: isLoggedIn changed to', val)
 }, { immediate: true })
 
-// Icons for dashboard stats
 const RevenueIcon = defineComponent({
   template: `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`
 })
@@ -141,8 +143,6 @@ const CollectionIcon = defineComponent({
   template: `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`
 })
 
-// Fetch Invoices for stats if logged in
-// Fetch Invoices for stats if logged in
 const { $axios } = useNuxtApp()
 const { data: invoices, refresh: refreshInvoices } = await useAsyncData('dashboard-invoices', async () => {
   if (!isLoggedIn.value) return []
@@ -177,10 +177,4 @@ const dashboardStats = computed(() => {
   ]
 })
 
-useHead({
-  title: isLoggedIn.value ? 'Dashboard - InvoiceAI' : 'AI Invoice Management - Smart Billing',
-  meta: [
-    { name: 'description', content: 'The next generation of invoice management powered by AI.' }
-  ]
-})
 </script>
