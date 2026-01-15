@@ -8,8 +8,6 @@ const upload = require('../../../middleware/upload');
 router.post('/', async (req, res) => {
     try {
         const { number, client, date, amount, status } = req.body;
-
-        // Validation
         if (!number || !client || !date || amount === undefined) {
             return res.status(400).json({ message: 'All fields (number, client, date, amount) are required' });
         }
@@ -36,13 +34,11 @@ router.post('/:id/upload', upload.single('image'), async (req, res) => {
         }
         const imagePath = req.file.path.replace(/\\/g, '/');
         const relativePath = '/uploads/' + req.file.filename;
-
         const invoice = await Invoice.findByIdAndUpdate(
             req.params.id,
             { image: relativePath },
             { new: true }
         );
-
         if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
 
         res.json({ message: 'File uploaded successfully', invoice });
