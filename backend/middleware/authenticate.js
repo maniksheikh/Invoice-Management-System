@@ -4,7 +4,6 @@ const authRoute = async (req, res, next) => {
     if (req.headers?.authorization) {
         try {
             const token = req.headers.authorization.split(" ")[1];
-            // verify user token
             const decodedUser = await admin.auth().verifyIdToken(token);
             const email = decodedUser.email
             const userId = decodedUser.uid
