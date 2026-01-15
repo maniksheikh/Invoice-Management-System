@@ -78,13 +78,11 @@ router.post('/param', async (req, res) => {
     try {
         const { email, ...details } = req.body;
         if (!email) return res.status(400).json({ message: 'Email is required' });
-
         const person = await Person.findOneAndUpdate(
             { email },
             { $set: details },
             { new: true, upsert: true }
         );
-
         res.json({ message: 'Person details updated successfully', person });
     } catch (error) {
         res.status(500).json({ message: 'Error updating person details', error: error.message });
