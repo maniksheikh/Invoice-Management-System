@@ -10,8 +10,6 @@ const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret';
 router.post('/register', async (req, res) => {
     try {
         const { name, email, password } = req.body;
-
-        // Check if person already exists
         const existingPerson = await Person.findOne({ email });
         if (existingPerson) {
             return res.status(400).json({ message: 'Person with this email already exists' });
@@ -39,14 +37,12 @@ router.post('/login', async (req, res) => {
         if (!person || !(await bcrypt.compare(password, person.password))) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
-
         // Generate JWT
         const token = jwt.sign(
             { id: person._id, email: person.email },
             JWT_SECRET,
             { expiresIn: '24h' }
         );
-
         res.json({
             message: 'Login successful',
             token,
@@ -55,7 +51,7 @@ router.post('/login', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error logging in', error: error.message });
     }
-});
+})
 
 // Get Person Details
 router.get('/details', async (req, res) => {
@@ -69,7 +65,6 @@ router.get('/details', async (req, res) => {
             console.log(`Backend: Person not found for email: ${email}`);
             return res.status(404).json({ message: 'Person not found' });
         }
-
         console.log(`Backend: Person found: ${person.email}`);
         res.json(person);
     } catch (error) {
