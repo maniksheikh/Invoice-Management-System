@@ -10,4 +10,5 @@ admin.initializeApp({
         privateKey: serviceAccount.private_key.replace(/\\n/g, "\n"),
     }),
 });
+
 module.exports = admin;

@@ -24,4 +24,5 @@ const authorize = async (req, res, next) => {
         await client.close();
     }
 }
+
 module.exports = authorize;
