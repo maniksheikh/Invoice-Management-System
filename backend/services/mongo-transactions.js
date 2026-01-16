@@ -8,8 +8,10 @@ module.exports = {
         limit = 0,
         pageNumber = 0,
         session
-    ) {
+    )
 
+    // Note limit = 0 is the equivalent of setting no limit
+    {
         try {
             const list = await db.collection(collection)
                 .find(query, session)
@@ -86,6 +88,7 @@ module.exports = {
             return false;
         }
     },
+
     async updateData(db, collection, query, payload, session) {
         payload.updatedAt = Date.now();
         try {
@@ -94,12 +97,13 @@ module.exports = {
             };
             let result = await db.collection(collection)
                 .updateOne(query, updateDoc, session);
-            return !!result.result.n; // for returning boolean value of if updated or not
+            return !!result.result.n;
         } catch (e) {
             console.error(e);
             return false;
         }
     },
+
     async deleteData(db, collection, query, session) {
         try {
             let result = await db.collection(collection)
@@ -111,6 +115,7 @@ module.exports = {
             return false;
         }
     },
+
     async documentExists(db, collection, query, session) {
         try {
             let result =
