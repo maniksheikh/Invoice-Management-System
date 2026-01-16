@@ -9,7 +9,7 @@ module.exports = {
         pageNumber = 0,
         session
     ) {
-        // Note limit = 0 is the equivalent of setting no limit
+
         try {
             const list = await db.collection(collection)
                 .find(query, session)
@@ -24,6 +24,7 @@ module.exports = {
             return false;
         }
     },
+
     async fetchOne(db, collection, query = {}, session) {
         try {
             const list = await db.collection(collection)
@@ -35,6 +36,7 @@ module.exports = {
             return false;
         }
     },
+
     async insertOne(db, collection, payload, session) {
         try {
             const response = await db.collection(collection)
@@ -45,8 +47,8 @@ module.exports = {
             return false;
         }
     },
+
     async updateOne(db, collection, query, payload, session) {
-        // this option instructs the method to create a document if no documents match the filter
         payload.updatedAt = Date.now();
         const options = { upsert: true };
         const updateDoc = {
@@ -61,6 +63,7 @@ module.exports = {
             return false;
         }
     },
+
     async updateOneArray(db, collection, query, payload, session) {
         const options = {};
         try {
@@ -72,6 +75,7 @@ module.exports = {
             return false;
         }
     },
+
     async insertMany(db, collection, payload, session) {
         try {
             const response = await db.collection(collection)
