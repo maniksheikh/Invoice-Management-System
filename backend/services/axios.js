@@ -11,7 +11,6 @@ module.exports = {
         const defaultOptions = {
             headers: {}
         };
-
         return {
             get: (url, options = {}) =>
                 axios.get(url, { ...defaultOptions, ...options }),

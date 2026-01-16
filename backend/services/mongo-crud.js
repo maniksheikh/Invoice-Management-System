@@ -21,4 +21,5 @@ const getMongoConnection = async () => {
         throw error;
     }
 }
+
 module.exports = getMongoConnection;
