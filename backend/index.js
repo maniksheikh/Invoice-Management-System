@@ -35,11 +35,9 @@ if (!allowedOrigins.includes("http://localhost:5173")) allowedOrigins.push("http
 app.use(
   cors({
     origin: function (origin, callback) {
-      // console.log("Request Origin: ", origin);
       if (!origin) return callback(null, true);
 
       const isAllowed = allowedOrigins.some(allowed => origin.toLowerCase() === allowed.toLowerCase());
-
       if (!isAllowed) {
         const msg = `The CORS policy for ${origin} does not allow access from the specified Origin.`;
         const err = new Error(msg);
