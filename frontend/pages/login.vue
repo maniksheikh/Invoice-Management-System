@@ -53,8 +53,7 @@
               type="password" 
               required 
               class="appearance-none relative block w-full px-4 py-3 border border-white/10 placeholder-gray-500 text-white rounded-xl bg-white/5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all sm:text-sm" 
-              placeholder="••••••••" 
-            />
+              placeholder="••••••••"/>
           </div>
         </div>
 
@@ -67,7 +66,6 @@
             <span v-else>Sign in</span>
           </button>
         </div>
-
         <div class="mt-6">
           <div class="relative">
             <div class="absolute inset-0 flex items-center">
