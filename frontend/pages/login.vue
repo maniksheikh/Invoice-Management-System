@@ -126,8 +126,7 @@ const error = ref(null)
 
 const handleLogin = async () => {
   loading.value = true
-  error.value = null
-  
+  error.value = null 
   try {
     await signInWithEmail({ email: form.email, password: form.password })
     navigateTo('/invoices')

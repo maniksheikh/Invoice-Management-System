@@ -127,6 +127,7 @@
 </template>
 
 <script setup>
+
 useHead({
   title: 'Profile - InvoiceAI',
 })
