@@ -5,8 +5,6 @@
       <NuxtRouteAnnouncer />
       <NuxtPage />
     </div>
-    <!-- Global Auth Overlay -->
-    <!-- <AuthOverlay /> -->
   </div>
 </template>
 
