@@ -17,18 +17,15 @@
           Create Invoice
         </NuxtLink>
       </div>
-
       <!-- Loading State -->
       <div v-if="pending" class="flex justify-center py-12">
         <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
       </div>
-
       <!-- Error State -->
       <div v-if="error" class="bg-rose-500/10 border border-rose-500/20 text-rose-400 px-4 py-3 rounded-xl mb-8">
         Error loading invoices: {{ error.message }}
         <button @click="refresh" class="ml-4 underline cursor-pointer">Retry</button>
       </div>
-
       <!-- Stats Summary -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
         <div v-for="stat in stats" :key="stat.label" class="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm">
@@ -59,8 +56,7 @@
         <div class="flex gap-2 w-full md:w-auto">
           <select 
             v-model="statusFilter"
-            class="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all appearance-none cursor-pointer min-w-[120px]"
-          >
+            class="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all appearance-none cursor-pointer min-w-[120px]">
             <option value="all">All Status</option>
             <option value="paid">Paid</option>
             <option value="unpaid">Unpaid</option>
