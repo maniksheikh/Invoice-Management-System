@@ -179,8 +179,7 @@
                 <div class="relative">
                   <button 
                     @click="activeStatusMenu = activeStatusMenu === invoice._id ? null : invoice._id"
-                    class="p-2 bg-white/5 hover:bg-white/10 text-gray-300 rounded-lg transition-all cursor-pointer"
-                  >
+                    class="p-2 bg-white/5 hover:bg-white/10 text-gray-300 rounded-lg transition-all cursor-pointer">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                     </svg>
@@ -189,8 +188,7 @@
                     <button v-for="s in ['paid', 'unpaid', 'overdue']" :key="s" 
                       @click="updateStatus(invoice._id, s); activeStatusMenu = null"
                       class="w-full text-left px-4 py-2 text-xs font-semibold uppercase tracking-wider hover:bg-white/5 transition-colors cursor-pointer"
-                      :class="s === invoice.status ? 'text-indigo-400' : 'text-gray-400'"
-                    >
+                      :class="s === invoice.status ? 'text-indigo-400' : 'text-gray-400'">
                       {{ s }}
                     </button>
                   </div>
@@ -209,8 +207,7 @@
           <p class="text-gray-500 text-sm mt-1 mb-8">Try adjusting your search or filters.</p>
           <NuxtLink 
             to="/invoices/create"
-            class="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white px-6 py-2.5 rounded-xl font-semibold transition-all transform hover:scale-105"
-          >
+            class="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white px-6 py-2.5 rounded-xl font-semibold transition-all transform hover:scale-105">
             Create Your First Invoice
           </NuxtLink>
         </div>
@@ -243,6 +240,7 @@
 </template>
 
 <script setup>
+
 definePageMeta({
   middleware: ['auth']
 })
@@ -261,7 +259,6 @@ const { data: invoices, pending, error, refresh } = await useFetch(`${config.pub
   lazy: false,
   server: true
 })
-
 
 // Update Status Function
 const updateStatus = async (id, status) => {
