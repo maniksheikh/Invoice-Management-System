@@ -31,7 +31,6 @@
           </svg>
           Create Invoice
         </NuxtLink>
-
         <NuxtLink to="/invoices" class="flex items-center gap-4 bg-white/5 border border-white/10 hover:bg-white/10 text-white p-6 rounded-3xl transition-all group">
           <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -43,7 +42,6 @@
             <p class="text-xs text-gray-400">Manage all records</p>
           </div>
         </NuxtLink>
-
         <div class="flex items-center gap-4 bg-white/5 border border-white/10 p-6 rounded-3xl opacity-50 cursor-not-allowed">
           <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center">
             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -55,7 +53,6 @@
             <p class="text-xs text-gray-400">Coming Soon</p>
           </div>
         </div>
-
         <div class="flex items-center gap-4 bg-white/5 border border-white/10 p-6 rounded-3xl opacity-50 cursor-not-allowed">
           <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center">
             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -93,8 +90,7 @@
           </NuxtLink>
           <NuxtLink to="/login" class="text-sm font-semibold leading-6 text-white group">Sign in to account <span aria-hidden="true" class="inline-block transition-transform group-hover:translate-x-1">→</span></NuxtLink>
         </div>
-      </div>
-      
+      </div>   
       <!-- Preview Image -->
       <div class="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-32">
         <div class="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
@@ -153,7 +149,9 @@ const { data: invoices, refresh: refreshInvoices } = await useAsyncData('dashboa
     console.error('Failed to fetch invoices:', error)
     return []
   }
-}, {
+},
+
+{
   immediate: isLoggedIn.value,
   watch: [isLoggedIn]
 })
