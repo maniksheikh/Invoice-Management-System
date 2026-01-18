@@ -69,7 +69,6 @@
                         Settings
                       </a>
                     </div>
-                    
                     <div class="border-t border-white/5 pt-1 mt-1">
                       <button @click="logout(); isProfileMenuOpen = false" class="flex w-full cursor-pointer items-center gap-3 px-4 py-2 text-sm text-rose-400 hover:bg-rose-500/10 transition-colors">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -83,7 +82,6 @@
               </div>
             </template>
           </div>
-
           <!-- Mobile menu button -->
           <button @click="isMobileMenuOpen = !isMobileMenuOpen" class="md:hidden p-2 cursor-pointer text-gray-400 hover:text-white transition-colors">
             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -102,8 +100,7 @@
       enter-to-class="transform translate-y-0 opacity-100"
       leave-active-class="transition duration-150 ease-in"
       leave-from-class="transform translate-y-0 opacity-100"
-      leave-to-class="transform -translate-y-4 opacity-0"
-    >
+      leave-to-class="transform -translate-y-4 opacity-0">
       <div v-show="isMobileMenuOpen" class="md:hidden bg-slate-900 border-b border-white/5">
         <div class="space-y-1 px-4 pb-3 pt-2">
           <NuxtLink v-for="link in navLinks" :key="link.to" :to="link.to" 
