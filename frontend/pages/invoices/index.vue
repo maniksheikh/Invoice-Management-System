@@ -238,6 +238,10 @@
 </template>
 
 <script setup>
+  
+  useHead({
+  title: 'Invoices - InvoiceAI',
+})
 
 definePageMeta({
   middleware: ['auth']
@@ -281,14 +285,12 @@ const confirmDelete = (invoice) => {
 }
 
 const handleDelete = async () => {
-  if (!invoiceToDelete.value) return
-  
+  if (!invoiceToDelete.value) return 
   try {
     deletingInvoice.value = true
     await $fetch(`${config.public.apiBase}/invoice/v1/${invoiceToDelete.value._id}`, {
       method: 'DELETE'
     })
-
     showDeleteListModal.value = false
     invoiceToDelete.value = null
     await refresh()
@@ -302,13 +304,11 @@ const handleDelete = async () => {
 // Dynamic Statistics
 const stats = computed(() => {
   if (!invoices.value) return []
-  
   const total = invoices.value.reduce((sum, inv) => sum + inv.amount, 0)
   const paidCount = invoices.value.filter(inv => inv.status === 'paid').length
   const pendingAmount = invoices.value
     .filter(inv => inv.status === 'unpaid' || inv.status === 'overdue')
     .reduce((sum, inv) => sum + inv.amount, 0)
-
   return [
     { label: 'Total Revenue', value: `$${total.toLocaleString()}`, trend: 'Total volume', trendUp: true },
     { label: 'Paid Invoices', value: paidCount.toString(), trend: `${Math.round((paidCount / (invoices.value.length || 1)) * 100)}% collection rate`, trendUp: true },
@@ -332,9 +332,6 @@ const filteredInvoices = computed(() => {
   })
 })
 
-useHead({
-  title: 'Invoices - InvoiceAI',
-})
 </script>
 
 <style scoped>
