@@ -35,8 +35,7 @@
               <div class="relative pl-6 border-l border-white/10" ref="profileDropdownRef">
                 <button 
                   @click="isProfileMenuOpen = !isProfileMenuOpen"
-                  class="flex items-center gap-3 group cursor-pointer focus:outline-none"
-                >
+                  class="flex items-center gap-3 group cursor-pointer focus:outline-none">
                   <!-- Avatar -->
                   <div class="h-9 w-9 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center overflow-hidden ring-2 ring-transparent group-hover:ring-indigo-500/50 transition-all">
                     <img v-if="user?.photoURL" :src="user.photoURL" :alt="user.displayName || user.name" class="h-full w-full object-cover" />
@@ -50,13 +49,11 @@
                   enter-to-class="transform scale-100 opacity-100"
                   leave-active-class="transition duration-75 ease-in"
                   leave-from-class="transform scale-100 opacity-100"
-                  leave-to-class="transform scale-95 opacity-0"
-                >
+                  leave-to-class="transform scale-95 opacity-0">
                   <div v-if="isProfileMenuOpen" class="absolute right-0 mt-3 w-56 bg-slate-800 border border-white/10 rounded-2xl shadow-xl py-2 z-50 overflow-hidden">
                     <div class="px-4 py-3 border-b border-white/5">
                       <p class="text-sm text-white font-medium truncate">{{ user?.email }}</p>
                     </div>
-  
                     <div class="py-1">
                       <NuxtLink to="/profile" @click="isProfileMenuOpen = false" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
