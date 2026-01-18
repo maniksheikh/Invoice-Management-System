@@ -54,8 +54,7 @@
               type="email" 
               required 
               class="appearance-none relative block w-full px-4 py-3 border border-white/10 placeholder-gray-500 text-white rounded-xl bg-white/5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all sm:text-sm" 
-              placeholder="name@company.com" 
-            />
+              placeholder="name@company.com"/>
           </div>
           <div>
             <label for="password" class="block text-sm font-medium text-gray-400 mb-1">Password</label>
@@ -66,8 +65,7 @@
               type="password" 
               required 
               class="appearance-none relative block w-full px-4 py-3 border border-white/10 placeholder-gray-500 text-white rounded-xl bg-white/5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all sm:text-sm" 
-              placeholder="••••••••" 
-            />
+              placeholder="••••••••"/>
           </div>
         </div>
 
