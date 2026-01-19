@@ -66,7 +66,67 @@
           </div>
         </div>
       </div>
+
+      <!-- Recent Invoices Section -->
+      <div class="mt-12">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-white tracking-tight">Recent Invoices</h2>
+          <NuxtLink to="/invoices" class="text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">
+            View all invoices &rarr;
+          </NuxtLink>
+        </div>
+        
+        <div class="bg-white/5 border border-white/10 rounded-3xl overflow-hidden backdrop-blur-xl">
+          <div v-if="!invoices?.length" class="p-12 text-center">
+            <svg class="mx-auto h-12 w-12 text-gray-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <p class="text-gray-400 font-medium">No invoices found. Start by creating one!</p>
+          </div>
+          
+          <div v-else class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead>
+                <tr class="border-b border-white/5 bg-white/5">
+                  <th class="px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Invoice</th>
+                  <th class="px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Client</th>
+                  <th class="px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Amount</th>
+                  <th class="px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
+                  <th class="px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wider text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5">
+                <tr v-for="invoice in invoices.slice(0, 5)" :key="invoice._id" class="hover:bg-white/5 transition-colors group">
+                  <td class="px-6 py-4">
+                    <span class="text-white font-medium">#{{ invoice.number }}</span>
+                    <p class="text-[10px] text-gray-500 mt-0.5">{{ invoice.date }}</p>
+                  </td>
+                  <td class="px-6 py-4">
+                    <span class="text-gray-300">{{ invoice.client }}</span>
+                  </td>
+                  <td class="px-6 py-4">
+                    <span class="text-white font-bold">${{ invoice.amount.toLocaleString() }}</span>
+                  </td>
+                  <td class="px-6 py-4">
+                    <span 
+                      class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border"
+                      :class="statusClasses[invoice.status]">
+                      {{ invoice.status }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-right">
+                    <NuxtLink :to="`/invoices/${invoice._id}`" class="text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer">
+                      Details
+                    </NuxtLink>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
+
     <!-- Guest Landing Page -->
     <div v-else class="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:items-center lg:gap-x-10 lg:px-8 lg:pt-40">
       <div class="mx-auto max-w-2xl shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
@@ -113,6 +173,8 @@
 
 <script setup>
 
+const { user, isLoggedIn } = useAuth()
+
 useHead({
   title: isLoggedIn.value ? 'Dashboard - InvoiceAI' : 'AI Invoice Management - Smart Billing',
   meta: [
@@ -120,7 +182,6 @@ useHead({
   ]
 })
 
-const { user, isLoggedIn } = useAuth()
 const config = useRuntimeConfig()
 
 watch(isLoggedIn, (val) => {
@@ -174,5 +235,12 @@ const dashboardStats = computed(() => {
     { label: 'Collection Rate', value: `${rate}%`, description: 'Overall efficiency', icon: CollectionIcon, color: 'bg-indigo-400 text-indigo-400' }
   ]
 })
+
+const statusClasses = {
+  paid: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  unpaid: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  overdue: 'bg-rose-500/10 text-rose-400 border-rose-500/20'
+}
+
 
 </script>
