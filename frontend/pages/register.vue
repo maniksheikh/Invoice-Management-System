@@ -119,13 +119,14 @@
 </template>
 
 <script setup>
-import { useAuth } from '~/composables/useAuth'
+import useAuth from '~/composables/useAuth'
+
+const { signUpWithEmail, signInWithGoogle } = useAuth()
 
 useHead({
   title: 'Register - InvoiceAI',
 })
 
-const { signUpWithEmail, signInWithGoogle } = useAuth()
 const form = reactive({
   name: '',
   email: '',
