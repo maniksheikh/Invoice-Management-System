@@ -109,11 +109,12 @@
 
 <script setup>
 
+const { signInWithEmail, signInWithGoogle } = useAuth()
+
 useHead({
   title: 'Login - InvoiceAI',
 })
 
-const { signInWithEmail, signInWithGoogle } = useAuth()
 const form = reactive({
   email: '',
   password: ''
