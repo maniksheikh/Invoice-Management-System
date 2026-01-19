@@ -128,11 +128,12 @@
 
 <script setup>
 
+const { user, userDetails } = useAuth()
+
 useHead({
   title: 'Profile - InvoiceAI',
 })
 
-const { user, userDetails } = useAuth()
 const store = useMainStore()
 
 const isEditing = ref(false)
