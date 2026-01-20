@@ -1,7 +1,13 @@
 <template>
   <div class="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-3xl">
-      <!-- Header -->
+      <!-- Loading State -->
+      <div v-if="!isAuthReady" class="min-h-screen flex items-center justify-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+      </div>
+
+      <div v-else-if="isLoggedIn">
+        <!-- Header -->
       <div class="mb-8">
         <NuxtLink 
           to="/invoices" 
@@ -171,6 +177,7 @@
           </div>
         </form>
       </div>
+      </div>
     </div>
   </div>
 </template>
@@ -181,6 +188,7 @@ definePageMeta({
   middleware: ['auth']
 })
 
+const { isAuthReady, isLoggedIn } = useAuth()
 const config = useRuntimeConfig()
 const createdInvoice = ref(null)
 const submitting = ref(false)
