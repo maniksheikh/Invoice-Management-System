@@ -80,7 +80,7 @@ export default function useAuth() {
             );
         }
     }
-    
+
     async function signInWithEmail(payload) {
         try {
             store.setUserLoading(true);
@@ -111,7 +111,7 @@ export default function useAuth() {
             throw error;
         }
     }
-    
+
     async function forgetPassword(email) {
         await sendPasswordResetEmail(auth, email);
     }
@@ -158,5 +158,6 @@ export default function useAuth() {
         user: computed(() => store.user),
         userDetails: computed(() => store.userDetails),
         isLoggedIn: computed(() => !!store.user),
+        isAuthReady: computed(() => store.isAuthReady),
     };
 }

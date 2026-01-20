@@ -64,7 +64,7 @@ export default function () {
                     }
                 }
 
- // Immediately refresh and set up interval
+                // Immediately refresh and set up interval
                 try {
                     await refreshAndSetIdToken(user);
                 } catch (e) {
@@ -86,6 +86,7 @@ export default function () {
                 }
             }
             store.setUserLoading(false);
+            store.setAuthReady(true);
         });
         isInitialized = true;
     }
@@ -121,7 +122,7 @@ export default function () {
         }
     });
 
-// Function to log events
+    // Function to log events
     function eventLog(event_name, payload) {
         if (analytics) {
             logEvent(analytics, event_name, payload);
