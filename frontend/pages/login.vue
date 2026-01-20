@@ -6,7 +6,12 @@
       <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[100px]"></div>
     </div>
 
-    <div class="max-w-md w-full space-y-8 bg-white/5 p-8 rounded-3xl border border-white/10 backdrop-blur-xl shadow-2xl relative z-10">
+    <!-- Loading State -->
+    <div v-if="!isAuthReady" class="min-h-screen flex items-center justify-center relative z-20">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+    </div>
+
+    <div v-else-if="!isLoggedIn" class="max-w-md w-full space-y-8 bg-white/5 p-8 rounded-3xl border border-white/10 backdrop-blur-xl shadow-2xl relative z-10">
       <div>
         <div class="flex justify-center">
           <div class="w-16 h-16 bg-indigo-500 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
@@ -109,7 +114,7 @@
 
 <script setup>
 
-const { signInWithEmail, signInWithGoogle } = useAuth()
+const { signInWithEmail, signInWithGoogle, isAuthReady, isLoggedIn } = useAuth()
 
 useHead({
   title: 'Login - InvoiceAI',
