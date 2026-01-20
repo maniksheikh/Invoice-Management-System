@@ -6,9 +6,13 @@ export const useMainStore = defineStore('main', {
         user: null,
         userDetails: null,
         loading: false,
+        isAuthReady: false,
     }),
 
     actions: {
+        setAuthReady(ready) {
+            this.isAuthReady = ready
+        },
         setUser(user) {
             this.user = user ? markRaw(user) : null
         },
