@@ -6,7 +6,12 @@
       <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px]"></div>
     </div>
 
-    <div class="max-w-4xl mx-auto space-y-8">
+    <!-- Loading State -->
+    <div v-if="!isAuthReady" class="min-h-screen flex items-center justify-center relative z-20">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+    </div>
+
+    <div v-else-if="isLoggedIn" class="max-w-4xl mx-auto space-y-8">
       <!-- Header -->
       <div class="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl relative overflow-hidden group">
         <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -128,7 +133,7 @@
 
 <script setup>
 
-const { user, userDetails } = useAuth()
+const { user, userDetails, isAuthReady, isLoggedIn } = useAuth()
 
 useHead({
   title: 'Profile - InvoiceAI',

@@ -1,7 +1,13 @@
 <template>
   <div class="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-4xl">
-      <!-- Header / Actions -->
+      <!-- Loading State -->
+      <div v-if="!isAuthReady" class="min-h-screen flex items-center justify-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+      </div>
+
+      <div v-else-if="isLoggedIn">
+        <!-- Header / Actions -->
       <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
         <div>
           <NuxtLink 
@@ -242,6 +248,7 @@
           </div>
         </form>
       </div>
+      </div>
     </div>
   </div>
 </template>
@@ -251,6 +258,7 @@ definePageMeta({
   middleware: ['auth']
 })
 
+const { isAuthReady, isLoggedIn } = useAuth()
 const route = useRoute()
 const config = useRuntimeConfig()
 const showDeleteModal = ref(false)
