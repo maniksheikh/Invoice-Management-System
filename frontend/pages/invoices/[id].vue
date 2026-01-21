@@ -5,15 +5,13 @@
       <div v-if="!isAuthReady" class="min-h-screen flex items-center justify-center">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
       </div>
-
       <div v-else-if="isLoggedIn">
         <!-- Header / Actions -->
       <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
         <div>
           <NuxtLink 
             to="/invoices" 
-            class="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-2 transition-colors group"
-          >
+            class="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-2 transition-colors group">
             <svg class="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
@@ -25,16 +23,14 @@
               <span 
                 v-if="invoice"
                 class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider cursor-pointer hover:opacity-80 transition-all border border-white/10"
-                :class="statusClasses[invoice.status]"
-              >
+                :class="statusClasses[invoice.status]">
                 {{ invoice.status === 'unpaid' ? 'Unpaid' : invoice.status }}
               </span>
               <div class="absolute left-0 top-full mt-1 hidden group-hover/status:block z-50 bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden min-w-[120px]">
                 <button v-for="s in ['paid', 'unpaid', 'overdue']" :key="s" 
                   @click="updateStatus(s)"
                   class="w-full text-left px-4 py-2 text-xs font-semibold uppercase tracking-wider hover:bg-white/5 transition-colors cursor-pointer"
-                  :class="s === invoice?.status ? 'text-indigo-400' : 'text-gray-400'"
-                >
+                  :class="s === invoice?.status ? 'text-indigo-400' : 'text-gray-400'">
                   {{ s }}
                 </button>
               </div>
@@ -45,8 +41,7 @@
         <div class="flex items-center gap-3">
           <button 
             @click="openEditModal"
-            class="flex-1 md:flex-none flex items-center cursor-pointer justify-center gap-2 bg-white/5 hover:bg-white/10 text-white px-6 py-2.5 rounded-xl font-semibold border border-white/10 transition-all"
-          >
+            class="flex-1 md:flex-none flex items-center cursor-pointer justify-center gap-2 bg-white/5 hover:bg-white/10 text-white px-6 py-2.5 rounded-xl font-semibold border border-white/10 transition-all">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
@@ -54,8 +49,7 @@
           </button>
           <button 
             @click="handlePrint"
-            class="flex-1 md:flex-none flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white px-6 py-2.5 rounded-xl font-semibold border border-white/10 transition-all cursor-pointer"
-          >
+            class="flex-1 md:flex-none flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white px-6 py-2.5 rounded-xl font-semibold border border-white/10 transition-all cursor-pointer">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
             </svg>
@@ -63,8 +57,7 @@
           </button>
           <button 
             @click="confirmDelete"
-            class="flex-1 md:flex-none flex items-center cursor-pointer justify-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 px-6 py-2.5 rounded-xl font-semibold border border-rose-500/20 transition-all"
-          >
+            class="flex-1 md:flex-none flex items-center cursor-pointer justify-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 px-6 py-2.5 rounded-xl font-semibold border border-rose-500/20 transition-all">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
@@ -174,7 +167,6 @@
             </div>
           </div>
         </div>
-
         <!-- Footer -->
         <div class="p-8 sm:p-12 bg-white/5 border-t border-white/10 text-center">
           <p class="text-gray-500 text-sm">Thank you for your business! Please settle the payment by the due date.</p>
@@ -193,7 +185,6 @@
         </div>
         <h2 class="text-xl font-bold text-white mb-2 text-center">Delete Invoice?</h2>
         <p class="text-gray-400 text-center mb-6">Are you sure you want to delete this invoice? This action cannot be undone.</p>
-        
         <div class="flex gap-3">
           <button @click="showDeleteModal = false" class="flex-1 px-4 py-3 rounded-xl border border-white/10 text-gray-400 hover:bg-white/5 transition-colors font-medium cursor-pointer">
             Cancel
