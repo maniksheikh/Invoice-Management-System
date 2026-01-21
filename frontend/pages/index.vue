@@ -247,5 +247,4 @@ const statusClasses = {
   overdue: 'bg-rose-500/10 text-rose-400 border-rose-500/20'
 }
 
-
 </script>
