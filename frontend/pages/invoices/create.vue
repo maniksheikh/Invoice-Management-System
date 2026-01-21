@@ -5,14 +5,12 @@
       <div v-if="!isAuthReady" class="min-h-screen flex items-center justify-center">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
       </div>
-
       <div v-else-if="isLoggedIn">
         <!-- Header -->
       <div class="mb-8">
         <NuxtLink 
           to="/invoices" 
-          class="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-4 transition-colors group"
-        >
+          class="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-4 transition-colors group">
           <svg class="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
@@ -42,8 +40,7 @@
               @change="handleImageUpload" 
               class="hidden" 
               id="invoice-image"
-              :disabled="submitting"
-            >
+              :disabled="submitting">
             <label for="invoice-image" class="cursor-pointer block">
               <div class="mb-4">
                 <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
@@ -58,14 +55,12 @@
           <div class="flex justify-end gap-4">
             <NuxtLink 
               to="/invoices" 
-              class="px-6 py-3 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white transition-all font-bold shadow-lg shadow-indigo-500/20 cursor-pointer"
-            >
+              class="px-6 py-3 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white transition-all font-bold shadow-lg shadow-indigo-500/20 cursor-pointer">
               View Invoices
             </NuxtLink>
             <button 
               @click="navigateTo('/invoices')" 
-              class="px-6 py-3 rounded-xl border border-white/10 text-gray-400 hover:bg-white/5 transition-all font-medium cursor-pointer"
-            >
+              class="px-6 py-3 rounded-xl border border-white/10 text-gray-400 hover:bg-white/5 transition-all font-medium cursor-pointer">
               Skip upload
             </button>
           </div>
@@ -82,8 +77,7 @@
                   type="text" 
                   required 
                   placeholder="INV-2024-001" 
-                  class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
-                />
+                  class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"/>
               </div>
             </div>
 
@@ -96,8 +90,7 @@
                   type="text" 
                   required 
                   placeholder="Dec 31, 2024" 
-                  class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
-                />
+                  class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"/>
               </div>
             </div>
           </div>
