@@ -50,8 +50,7 @@
             v-model="searchQuery"
             type="text" 
             placeholder="Search invoice or client..." 
-            class="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
-          />
+            class="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"/>
         </div>
         <div class="flex gap-2 w-full md:w-auto">
           <select 
