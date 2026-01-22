@@ -32,7 +32,6 @@
             <h2 class="text-2xl font-bold text-white mb-2">Invoice Created Successfully!</h2>
             <p class="text-gray-400">Would you like to upload an image for this invoice?</p>
           </div>
-
           <div class="border-2 border-dashed border-white/10 rounded-xl p-8 text-center hover:border-indigo-500/50 transition-colors">
             <input 
               type="file" 
@@ -51,7 +50,6 @@
               <p class="text-xs text-gray-500">SVG, PNG, JPG, WEBP allowed</p>
             </label>
           </div>
-
           <div class="flex justify-end gap-4">
             <NuxtLink 
               to="/invoices" 
@@ -65,7 +63,6 @@
             </button>
           </div>
         </div>
-
         <form v-else @submit.prevent="handleSubmit" class="space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Invoice Number -->
@@ -80,7 +77,6 @@
                   class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"/>
               </div>
             </div>
-
             <!-- Date -->
             <div>
               <label class="block text-sm font-medium text-gray-400 mb-2">Issue Date</label>
@@ -94,7 +90,6 @@
               </div>
             </div>
           </div>
-
           <!-- Client Name -->
           <div>
             <label class="block text-sm font-medium text-gray-400 mb-2">Client Name</label>
@@ -105,7 +100,6 @@
               placeholder="Enter client or company name" 
               class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"/>
           </div>
-
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Amount -->
             <div>
