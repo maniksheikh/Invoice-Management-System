@@ -8,7 +8,6 @@
     <div v-if="!isAuthReady" class="min-h-screen flex items-center justify-center">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
     </div>
-
     <!-- Authenticated Dashboard -->
     <div v-else-if="isLoggedIn" class="mx-auto max-w-7xl px-6 pt-32 pb-24">
       <div class="mb-12">
@@ -79,8 +78,7 @@
           <NuxtLink to="/invoices" class="text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">
             View all invoices &rarr;
           </NuxtLink>
-        </div>
-        
+        </div>        
         <div class="bg-white/5 border border-white/10 rounded-3xl overflow-hidden backdrop-blur-xl">
           <div v-if="!invoices?.length" class="p-12 text-center">
             <svg class="mx-auto h-12 w-12 text-gray-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -88,7 +86,6 @@
             </svg>
             <p class="text-gray-400 font-medium">No invoices found. Start by creating one!</p>
           </div>
-          
           <div v-else class="overflow-x-auto">
             <table class="w-full text-left">
               <thead>
