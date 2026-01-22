@@ -65,12 +65,10 @@
           </button>
         </div>
       </div>
-
       <!-- Main Content / Invoice Card -->
       <div v-if="pending" class="flex justify-center py-20">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
       </div>
-
       <div v-else-if="error" class="bg-rose-500/10 border border-rose-500/20 text-rose-400 p-8 rounded-2xl text-center">
         <svg class="mx-auto h-12 w-12 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -100,8 +98,7 @@
                 <p>Tech City, TC 54321</p>
                 <p>support@invoiceai.com</p>
               </div>
-            </div>
-            
+            </div> 
             <div class="text-left sm:text-right space-y-2">
               <p class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Invoice Date</p>
               <p class="text-xl font-bold text-white">{{ invoice.date }}</p>
@@ -199,8 +196,7 @@
     <div v-if="showEditModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4">
       <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" @click="showEditModal = false"></div>
       <div class="relative bg-slate-900 border border-white/10 rounded-2xl w-full max-w-md p-6 shadow-2xl">
-        <h2 class="text-xl font-bold text-white mb-6">Edit Invoice</h2>
-        
+        <h2 class="text-xl font-bold text-white mb-6">Edit Invoice</h2>   
         <form @submit.prevent="handleUpdate" class="space-y-4">
           <div>
             <label class="block text-sm font-medium text-gray-400 mb-1">Invoice Number</label>
@@ -228,7 +224,6 @@
             <label class="block text-sm font-medium text-gray-400 mb-1">Date</label>
             <input v-model="editForm.date" type="text" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
           </div>
-
           <div class="flex gap-3 pt-4">
             <button type="button" @click="showEditModal = false" class="flex-1 px-4 py-2 rounded-xl border border-white/10 text-gray-400 hover:bg-white/5 transition-colors font-medium cursor-pointer">
               Cancel
