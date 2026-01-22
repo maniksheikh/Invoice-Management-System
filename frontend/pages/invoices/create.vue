@@ -115,7 +115,6 @@
                   class="w-full bg-white/5 border border-white/10 rounded-xl pl-8 pr-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"/>
               </div>
             </div>
-
             <!-- Status -->
             <div>
               <label class="block text-sm font-medium text-gray-400 mb-2">Status</label>
@@ -135,7 +134,6 @@
               </div>
             </div>
           </div>
-
           <!-- Divider -->
           <div class="border-t border-white/10 pt-6">
             <div class="flex flex-col sm:flex-row gap-4">
@@ -165,6 +163,9 @@
 </template>
 
 <script setup>
+  useHead({
+  title: 'Create Invoice - InvoiceAI',
+})
 
 definePageMeta({
   middleware: ['auth']
@@ -226,10 +227,6 @@ const handleSubmit = async () => {
     submitting.value = false
   }
 }
-
-useHead({
-  title: 'Create Invoice - InvoiceAI',
-})
 
 </script>
 
