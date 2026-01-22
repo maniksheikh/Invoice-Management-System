@@ -9,8 +9,7 @@
         </div>
         <NuxtLink 
           to="/invoices/create"
-          class="flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white px-6 py-2.5 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg shadow-indigo-500/20"
-        >
+          class="flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white px-6 py-2.5 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg shadow-indigo-500/20">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
@@ -39,7 +38,6 @@
           </div>
         </div>
       </div>
-
       <!-- Filters & Search -->
       <div class="bg-white/5 border border-white/10 rounded-2xl p-4 mb-6 backdrop-blur-sm flex flex-col md:flex-row gap-4 items-center justify-between">
         <div class="relative w-full md:w-96">
@@ -63,7 +61,6 @@
           </select>
         </div>
       </div>
-
       <!-- Invoices List (Desktop Table / Mobile Cards) -->
       <div class="bg-white/5 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-sm">
         <!-- Desktop Table -->
@@ -163,7 +160,6 @@
                 <p class="text-gray-400 text-xs">{{ invoice.date }}</p>
               </div>
             </div>
-
             <div class="flex items-center justify-between pt-2">
               <span class="text-lg font-bold text-white">${{ invoice.amount.toLocaleString() }}</span>
               <div class="flex gap-2">
@@ -194,8 +190,7 @@
               </div>
             </div>
           </div>
-        </div>
-        
+        </div>   
         <!-- Empty State -->
         <div v-if="filteredInvoices.length === 0" class="py-20 text-center">
           <svg class="mx-auto h-12 w-12 text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
