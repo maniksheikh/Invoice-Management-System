@@ -54,7 +54,7 @@
                 <p class="font-medium">Theme</p>
                 <p class="text-sm text-gray-400">Currently fixed to dark mode</p>
               </div>
-              <div class="px-4 py-2 bg-indigo-500/10 text-indigo-400 rounded-xl text-sm font-bold border border-indigo-500/20">
+              <div class="px-4 py-2 bg-indigo-500/10 text-indigo-400 rounded-xl cursor-pointer text-sm font-bold border border-indigo-500/20">
                 Dark Mode
               </div>
             </div>
