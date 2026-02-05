@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+  <div :class="['min-h-screen py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden transition-colors duration-500', store.theme === 'dark' ? 'text-white' : 'text-slate-900']">
     <!-- Background Gradients -->
-    <div class="absolute inset-0 -z-10 bg-slate-950">
+    <div :class="['absolute inset-0 -z-10 transition-colors duration-500', store.theme === 'dark' ? 'bg-slate-950' : 'bg-slate-50']">
       <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px]"></div>
       <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px]"></div>
     </div>
@@ -13,11 +13,11 @@
 
     <div v-else-if="isLoggedIn" class="max-w-4xl mx-auto space-y-8">
       <!-- Header -->
-      <div class="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl relative overflow-hidden group">
+      <div :class="['border rounded-3xl p-8 backdrop-blur-xl relative overflow-hidden group transition-all duration-500', store.theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-white border-slate-200 shadow-sm']">
         <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         <div class="relative flex flex-col md:flex-row items-center gap-8">
           <div class="relative">
-            <div class="w-32 h-32 rounded-full bg-slate-800 border-4 border-indigo-500/30 flex items-center justify-center overflow-hidden shadow-2xl">
+            <div :class="['w-32 h-32 rounded-full border-4 flex items-center justify-center overflow-hidden shadow-2xl transition-colors duration-500', store.theme === 'dark' ? 'bg-slate-800 border-indigo-500/30' : 'bg-slate-100 border-indigo-500/20']">
               <img v-if="user?.photoURL" :src="user.photoURL" :alt="user.name" class="w-full h-full object-cover" />
               <span v-else class="text-4xl font-bold text-indigo-400">{{ user?.name?.charAt(0)?.toUpperCase() || 'U' }}</span>
             </div>
@@ -27,9 +27,9 @@
           <div class="text-center md:text-left flex-1">
             <div v-if="!isEditing" class="space-y-1">
               <div class="flex items-center gap-3">
-                <p class="text-xl text-white font-bold truncate">{{ userDetails?.displayName || user?.displayName || user?.name }}</p>
+                <p class="text-xl font-bold truncate">{{ userDetails?.displayName || user?.displayName || user?.name }}</p>
               </div>
-              <p class="text-indigo-300 font-medium mb-4">{{ user?.email }}</p>
+              <p :class="['font-medium mb-4 transition-colors', store.theme === 'dark' ? 'text-indigo-300' : 'text-indigo-600']">{{ user?.email }}</p>
             </div>
             
             <div v-else class="space-y-4 mb-4">
@@ -83,17 +83,17 @@
 
       <!-- Stats Grid -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div v-for="(stat, index) in profileStats" :key="index" class="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-xl hover:bg-white/10 transition-all">
-          <p class="text-gray-400 text-sm font-medium mb-1">{{ stat.label }}</p>
-          <p class="text-2xl font-bold text-white">{{ stat.value }}</p>
+        <div v-for="(stat, index) in profileStats" :key="index" :class="['border rounded-3xl p-6 backdrop-blur-xl transition-all', store.theme === 'dark' ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-white border-slate-200 hover:border-indigo-500/30 shadow-sm']">
+          <p :class="['text-sm font-medium mb-1 transition-colors', store.theme === 'dark' ? 'text-gray-400' : 'text-slate-500']">{{ stat.label }}</p>
+          <p class="text-2xl font-bold">{{ stat.value }}</p>
         </div>
       </div>
 
       <!-- Account Settings Section (Placeholder) -->
-      <div class="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl">
-        <h2 class="text-xl font-bold text-white mb-6">Account Settings</h2>
+      <div :class="['border rounded-3xl p-8 backdrop-blur-xl transition-colors duration-500', store.theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-white border-slate-200 shadow-sm']">
+        <h2 class="text-xl font-bold mb-6">Account Settings</h2>
         <div class="space-y-4">
-           <div class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:border-indigo-500/30 transition-all cursor-pointer group">
+           <div :class="['flex items-center justify-between p-4 rounded-xl border transition-all cursor-pointer group', store.theme === 'dark' ? 'bg-white/5 border-white/5 hover:border-indigo-500/30' : 'bg-slate-50 border-slate-100 hover:border-indigo-500/30']">
               <div class="flex items-center gap-4">
                 <div class="p-2 rounded-lg bg-indigo-500/20 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-colors">
                   <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -101,15 +101,15 @@
                   </svg>
                 </div>
                 <div>
-                  <p class="text-white font-medium">Notifications</p>
-                  <p class="text-sm text-gray-400">Manage your email preferences</p>
+                  <p class="font-medium">Notifications</p>
+                  <p :class="['text-sm transition-colors', store.theme === 'dark' ? 'text-gray-400' : 'text-slate-500']">Manage your email preferences</p>
                 </div>
               </div>
-              <svg class="w-5 h-5 text-gray-500 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg class="w-5 h-5 text-gray-500 group-hover:text-indigo-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
               </svg>
            </div>   
-           <div class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:border-indigo-500/30 transition-all cursor-pointer group">
+           <div :class="['flex items-center justify-between p-4 rounded-xl border transition-all cursor-pointer group', store.theme === 'dark' ? 'bg-white/5 border-white/5 hover:border-indigo-500/30' : 'bg-slate-50 border-slate-100 hover:border-indigo-500/30']">
               <div class="flex items-center gap-4">
                 <div class="p-2 rounded-lg bg-indigo-500/20 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-colors">
                   <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -117,11 +117,11 @@
                   </svg>
                 </div>
                 <div>
-                  <p class="text-white font-medium">Security</p>
-                  <p class="text-sm text-gray-400">Password and authentication</p>
+                  <p class="font-medium">Security</p>
+                  <p :class="['text-sm transition-colors', store.theme === 'dark' ? 'text-gray-400' : 'text-slate-500']">Password and authentication</p>
                 </div>
               </div>
-              <svg class="w-5 h-5 text-gray-500 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg class="w-5 h-5 text-gray-500 group-hover:text-indigo-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
               </svg>
            </div>
