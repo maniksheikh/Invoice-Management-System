@@ -7,9 +7,24 @@ export const useMainStore = defineStore('main', {
         userDetails: null,
         loading: false,
         isAuthReady: false,
+        theme: 'dark', // Default theme
     }),
 
     actions: {
+        initTheme() {
+            if (process.client) {
+                const savedTheme = localStorage.getItem('theme') || 'dark'
+                this.theme = savedTheme
+                document.documentElement.classList.toggle('dark', savedTheme === 'dark')
+            }
+        },
+        toggleTheme() {
+            this.theme = this.theme === 'dark' ? 'light' : 'dark'
+            if (process.client) {
+                localStorage.setItem('theme', this.theme)
+                document.documentElement.classList.toggle('dark', this.theme === 'dark')
+            }
+        },
         setAuthReady(ready) {
             this.isAuthReady = ready
         },
