@@ -1,5 +1,5 @@
 <template>
-  <div class="relative isolate overflow-hidden min-h-screen">
+  <div :class="['relative isolate overflow-hidden min-h-screen transition-colors duration-500', store.theme === 'dark' ? 'text-white' : 'text-slate-900']">
     <!-- Background Gradients -->
     <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
       <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)" />
@@ -11,18 +11,18 @@
     <!-- Authenticated Dashboard -->
     <div v-else-if="isLoggedIn" class="mx-auto max-w-7xl px-6 pt-32 pb-24">
       <div class="mb-12">
-        <h1 class="text-4xl font-bold text-white tracking-tight">Welcome back, {{ user?.name }}!</h1>
-        <p class="mt-2 text-gray-400">Here's what's happening with your business today.</p>
+        <h1 class="text-4xl font-bold tracking-tight">Welcome back, {{ user?.name }}!</h1>
+        <p :class="['mt-2 transition-colors', store.theme === 'dark' ? 'text-gray-400' : 'text-slate-500']">Here's what's happening with your business today.</p>
       </div>
       <!-- Quick Stats -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        <div v-for="stat in dashboardStats" :key="stat.label" class="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl relative group hover:bg-white/10 transition-all">
+        <div v-for="stat in dashboardStats" :key="stat.label" :class="['border rounded-3xl p-8 backdrop-blur-xl relative group transition-all', store.theme === 'dark' ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-white border-slate-200 hover:border-indigo-500/30 shadow-sm']">
           <div :class="`absolute top-6 right-6 p-3 rounded-2xl ${stat.color} bg-opacity-10 text-opacity-100`">
             <component :is="stat.icon" class="w-6 h-6" />
           </div>
-          <p class="text-sm font-medium text-gray-400 mb-2">{{ stat.label }}</p>
-          <p class="text-4xl font-bold text-white mb-2">{{ stat.value }}</p>
-          <p class="text-xs text-gray-500">{{ stat.description }}</p>
+          <p :class="['text-sm font-medium mb-2 transition-colors', store.theme === 'dark' ? 'text-gray-400' : 'text-slate-500']">{{ stat.label }}</p>
+          <p class="text-4xl font-bold mb-2">{{ stat.value }}</p>
+          <p :class="['text-xs transition-colors', store.theme === 'dark' ? 'text-gray-500' : 'text-slate-400']">{{ stat.description }}</p>
         </div>
       </div>
       <!-- Quick Actions -->
@@ -35,15 +35,15 @@
           </svg>
           Create Invoice
         </NuxtLink>
-        <NuxtLink to="/invoices" class="flex items-center gap-4 bg-white/5 border border-white/10 hover:bg-white/10 text-white p-6 rounded-3xl transition-all group">
-          <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+        <NuxtLink to="/invoices" :class="['flex items-center gap-4 border p-6 rounded-3xl transition-all group', store.theme === 'dark' ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-white border-slate-200 hover:border-indigo-500/30 shadow-sm']">
+          <div :class="['w-12 h-12 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform', store.theme === 'dark' ? 'bg-white/10' : 'bg-slate-100']">
             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
           <div>
             <p class="font-bold">All Invoices</p>
-            <p class="text-xs text-gray-400">Manage all records</p>
+            <p :class="['text-xs transition-colors', store.theme === 'dark' ? 'text-gray-400' : 'text-slate-500']">Manage all records</p>
           </div>
         </NuxtLink>
         <div class="flex items-center gap-4 bg-white/5 border border-white/10 p-6 rounded-3xl opacity-50 cursor-not-allowed">
@@ -57,8 +57,8 @@
             <p class="text-xs text-gray-400">Coming Soon</p>
           </div>
         </div>
-        <NuxtLink to="/settings" class="flex items-center gap-4 bg-white/5 border border-white/10 hover:bg-white/10 text-white p-6 rounded-3xl transition-all group">
-          <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+        <NuxtLink to="/settings" :class="['flex items-center gap-4 border p-6 rounded-3xl transition-all group', store.theme === 'dark' ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-white border-slate-200 hover:border-indigo-500/30 shadow-sm']">
+          <div :class="['w-12 h-12 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform', store.theme === 'dark' ? 'bg-white/10' : 'bg-slate-100']">
             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -66,7 +66,7 @@
           </div>
           <div>
             <p class="font-bold">Settings</p>
-            <p class="text-xs text-gray-400">Account preferences</p>
+            <p :class="['text-xs transition-colors', store.theme === 'dark' ? 'text-gray-400' : 'text-slate-500']">Account preferences</p>
           </div>
         </NuxtLink>
       </div>
@@ -175,6 +175,7 @@
 
 <script setup>
 
+const store = useMainStore()
 const { user, isLoggedIn, isAuthReady } = useAuth()
 
 useHead({
