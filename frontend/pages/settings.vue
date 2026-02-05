@@ -10,7 +10,6 @@
     <div v-if="!isAuthReady" class="min-h-screen flex items-center justify-center relative z-20">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
     </div>
-
     <div v-else-if="isLoggedIn" class="max-w-4xl mx-auto space-y-8">
       <!-- Header -->
       <div class="mb-8">
@@ -59,8 +58,7 @@
                 class="px-4 py-2 rounded-xl cursor-pointer text-sm font-bold border transition-all active:scale-95"
                 :class="store.theme === 'dark' 
                   ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20 hover:bg-indigo-500/20' 
-                  : 'bg-indigo-500 text-white border-indigo-600 hover:bg-indigo-600 shadow-md shadow-indigo-500/20'"
-              >
+                  : 'bg-indigo-500 text-white border-indigo-600 hover:bg-indigo-600 shadow-md shadow-indigo-500/20'">
                 {{ store.theme === 'dark' ? 'Dark Mode' : 'Light Mode' }}
               </div>
             </div>
