@@ -1,8 +1,7 @@
 <template>
   <nav :class="[
     'fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-xl shadow-sm transition-colors duration-500',
-    store.theme === 'dark' ? 'bg-slate-900/70 border-white/10' : 'bg-white/70 border-slate-200'
-  ]">
+    store.theme === 'dark' ? 'bg-slate-900/70 border-white/10' : 'bg-white/70 border-slate-200']">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-4">
       <div class="relative flex h-16 items-center justify-between">
         <div class="flex items-center gap-8">
