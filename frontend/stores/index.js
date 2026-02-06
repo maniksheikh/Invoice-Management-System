@@ -7,7 +7,7 @@ export const useMainStore = defineStore('main', {
         userDetails: null,
         loading: false,
         isAuthReady: false,
-        theme: 'dark', // Default theme
+        theme: 'dark',
     }),
 
     actions: {
