@@ -148,7 +148,6 @@
             </div>
           </div>
         </div>
-
         <!-- Danger Zone -->
         <div :class="['border-2 border-red-500 rounded-3xl p-8 backdrop-blur-xl transition-colors', store.theme === 'dark' ? 'bg-rose-500/5 border-rose-500/20' : 'bg-rose-50 border-rose-100 shadow-sm shadow-rose-500/5']">
           <h2 class="text-xl font-bold text-rose-500 mb-6 flex items-center gap-2">
