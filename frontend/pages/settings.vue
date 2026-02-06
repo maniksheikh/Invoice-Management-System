@@ -17,8 +17,8 @@
         <p :class="['mt-2 transition-colors', store.theme === 'dark' ? 'text-gray-400' : 'text-slate-500']">Manage your account preferences and security.</p>
       </div>
 
-      <!-- Settings Sections -->
-      <div class="space-y-6">
+   <!-- Settings Sections -->
+    <div class="space-y-6">
         <!-- Profile Section (Simplified link to Profile) -->
         <NuxtLink to="/profile" :class="['block border rounded-3xl p-6 backdrop-blur-xl transition-all group', store.theme === 'dark' ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-white border-slate-200 hover:border-indigo-500/30 shadow-sm']">
           <div class="flex items-center justify-between">
