@@ -194,7 +194,6 @@ const filteredName = computed(() => {
   const parts = full.split(' ')
   const excludes = ['Md', 'Md.', 'Mr', 'Mr.', 'Mrs', 'Mrs.', 'Ms', 'Ms.', 'Sheikh', 'Sheikh.', 'Khan', 'Mst', 'Mst.', 'Mohammad', 'Mohammed', 'Muhammad']
   const filtered = parts.filter(p => !excludes.some(ex => ex.toLowerCase() === p.toLowerCase().replace(/[^a-z]/g, '')))
-  
   return filtered.length > 0 ? filtered.join(' ') : parts[0]
 })
 
