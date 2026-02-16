@@ -11,7 +11,7 @@
     <!-- Authenticated Dashboard -->
     <div v-else-if="isLoggedIn" class="mx-auto max-w-7xl px-6 pt-32 pb-24">
       <div class="mb-12">
-        <h1 class="text-4xl font-bold tracking-tight">Welcome back, {{ user?.name }}!</h1>
+        <h1 class="text-4xl font-bold tracking-tight">Welcome back, {{ userDetails?.displayName || user?.displayName || userDetails?.name || 'User' }}!</h1>
         <p :class="['mt-2 transition-colors', store.theme === 'dark' ? 'text-gray-400' : 'text-slate-500']">Here's what's happening with your business today.</p>
       </div>
       <!-- Quick Stats -->
@@ -176,7 +176,7 @@
 <script setup>
 
 const store = useMainStore()
-const { user, isLoggedIn, isAuthReady } = useAuth()
+const { user, userDetails, isLoggedIn, isAuthReady } = useAuth()
 
 useHead({
   title: isLoggedIn.value ? 'Dashboard - InvoiceAI' : 'AI Invoice Management - Smart Billing',
