@@ -11,7 +11,7 @@
     <!-- Authenticated Dashboard -->
     <div v-else-if="isLoggedIn" class="mx-auto max-w-7xl px-6 pt-32 pb-24">
       <div class="mb-12">
-        <h1 class="text-4xl font-bold tracking-tight">Welcome back, {{ userDetails?.displayName || user?.displayName || userDetails?.name || 'User' }}!</h1>
+        <h1 class="text-4xl font-bold tracking-tight">Welcome back, {{ filteredName }}!</h1>
         <p :class="['mt-2 transition-colors', store.theme === 'dark' ? 'text-gray-400' : 'text-slate-500']">Here's what's happening with your business today.</p>
       </div>
       <!-- Quick Stats -->
@@ -186,6 +186,17 @@ useHead({
 })
 
 const config = useRuntimeConfig()
+
+const filteredName = computed(() => {
+  const full = userDetails.value?.displayName || user.value?.displayName || userDetails.value?.name || 'User'
+  if (full === 'User') return 'User'
+  
+  const parts = full.split(' ')
+  const excludes = ['Md', 'Md.', 'Mr', 'Mr.', 'Mrs', 'Mrs.', 'Ms', 'Ms.', 'Sheikh', 'Sheikh.', 'Khan', 'Mst', 'Mst.', 'Mohammad', 'Mohammed', 'Muhammad']
+  const filtered = parts.filter(p => !excludes.some(ex => ex.toLowerCase() === p.toLowerCase().replace(/[^a-z]/g, '')))
+  
+  return filtered.length > 0 ? filtered.join(' ') : parts[0]
+})
 
 watch(isLoggedIn, (val) => {
   console.log('Index.vue: isLoggedIn changed to', val)
