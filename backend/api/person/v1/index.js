@@ -55,7 +55,6 @@ router.get('/details', async (req, res) => {
         const { email } = req.query;
         console.log(`Backend: Fetching details for email: ${email}`);
         if (!email) return res.status(400).json({ message: 'Email is required' });
-
         const person = await Person.findOne({ email });
         if (!person) {
             console.log(`Backend: Person not found for email: ${email}`);
