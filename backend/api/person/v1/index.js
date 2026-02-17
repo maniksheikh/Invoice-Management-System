@@ -31,11 +31,9 @@ router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
         const person = await Person.findOne({ email });
-
         if (!person || !(await bcrypt.compare(password, person.password))) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
-        // Generate JWT
         const token = jwt.sign(
             { id: person._id, email: person.email },
             JWT_SECRET,
