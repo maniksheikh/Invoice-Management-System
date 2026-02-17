@@ -11,10 +11,8 @@ router.post('/', async (req, res) => {
         if (!number || !client || !date || amount === undefined) {
             return res.status(400).json({ message: 'All fields (number, client, date, amount) are required' });
         }
-
         const invoice = new Invoice({ number, client, date, amount, status: status || 'unpaid' });
         await invoice.save();
-
         console.log(`Invoice created successfully: ${number}`);
         res.status(201).json({ message: 'Invoice created successfully', invoice });
     } catch (error) {
@@ -40,7 +38,6 @@ router.post('/:id/upload', upload.single('image'), async (req, res) => {
             { new: true }
         );
         if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
-
         res.json({ message: 'File uploaded successfully', invoice });
     } catch (error) {
         res.status(500).json({ message: 'Error uploading file', error: error.message });
