@@ -8,10 +8,7 @@ module.exports = {
         limit = 0,
         pageNumber = 0,
         session
-    )
-
-    // Note limit = 0 is the equivalent of setting no limit
-    {
+    ) {
         try {
             const list = await db.collection(collection)
                 .find(query, session)
