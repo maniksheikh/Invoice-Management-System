@@ -36,7 +36,6 @@ app.use(
   cors({
     origin: function (origin, callback) {
       if (!origin) return callback(null, true);
-
       const isAllowed = allowedOrigins.some(allowed => origin.toLowerCase() === allowed.toLowerCase());
       if (!isAllowed) {
         const msg = `The CORS policy for ${origin} does not allow access from the specified Origin.`;
