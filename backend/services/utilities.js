@@ -10,6 +10,7 @@ module.exports = {
         }
         return newobj;
     },
+
     formatEndpointWhitespace(args) {
         return args.map((arg) => arg.replace(/\s/g, "+"));
     },
@@ -30,6 +31,7 @@ module.exports = {
         }
         return result;
     },
+
     flattenObject(ob) {
         var toReturn = {};
 
@@ -49,12 +51,14 @@ module.exports = {
         }
         return toReturn;
     },
+
     isNumeric(str) {
-        if (typeof str != "string") return false; // we only process strings!
+        if (typeof str != "string") return false;
         return (
-            !isNaN(str) && !isNaN(parseFloat(str)) // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-        ); // ...and ensure strings of whitespace fail
+            !isNaN(str) && !isNaN(parseFloat(str))
+        );
     },
+
     transformObjectStringPropertyToNumber(object) {
         return Object.entries(object).reduce((r, [k, o]) => {
             if (typeof o === "object") {
