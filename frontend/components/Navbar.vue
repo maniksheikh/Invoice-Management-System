@@ -14,7 +14,6 @@
             <span :class="['text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r', store.theme === 'dark' ? 'from-white to-gray-400' : 'from-slate-900 to-slate-500']">InvoiceAI</span>
           </NuxtLink>
         </div>
-        
         <!-- Centered Navigation -->
         <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center gap-1">
           <NuxtLink v-for="link in navLinks" :key="link.to" :to="link.to" 
@@ -22,7 +21,6 @@
             {{ link.label }}
           </NuxtLink>
         </div>
-
         <div class="flex items-center gap-4">
           <!-- Desktop menu -->
           <div class="hidden md:flex items-center gap-4">
