@@ -37,7 +37,6 @@
             </div>
           </div>
         </div>
-
         <div class="flex items-center gap-3">
           <button 
             @click="openEditModal"
@@ -79,7 +78,6 @@
           Back to Invoices
         </NuxtLink>
       </div>
-
       <div v-else-if="invoice" id="invoice-printable" class="bg-white/5 border border-white/10 rounded-3xl overflow-hidden backdrop-blur-sm shadow-2xl">
         <!-- Card Header / Brand -->
         <div class="p-8 sm:p-12 border-b border-white/10 bg-gradient-to-br from-indigo-500/5 to-purple-500/5">
@@ -109,7 +107,6 @@
             </div>
           </div>
         </div>
-
         <!-- Bill To / Details -->
         <div class="p-8 sm:p-12">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 mb-12">
@@ -122,7 +119,6 @@
               </div>
             </div>
           </div>
-
           <!-- Items Table (Mock for now as schema is simple) -->
           <div class="overflow-x-auto mb-12">
             <table class="w-full text-left">
@@ -145,7 +141,6 @@
               </tbody>
             </table>
           </div>
-
           <!-- Summary -->
           <div class="flex justify-end">
             <div class="w-full sm:w-80 space-y-4">
