@@ -165,7 +165,6 @@
         </div>
       </div>
     </div>
-
     <!-- Delete Confirmation Modal -->
     <div v-if="showDeleteModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4">
       <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" @click="showDeleteModal = false"></div>

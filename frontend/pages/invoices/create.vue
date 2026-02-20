@@ -19,7 +19,6 @@
         <h1 class="text-3xl font-bold text-white">Create New Invoice</h1>
         <p class="text-gray-400 mt-1">Fill in the details below to generate a new invoice.</p>
       </div>
-
       <!-- Form Card -->
       <div class="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 backdrop-blur-sm shadow-2xl">
         <div v-if="createdInvoice" class="space-y-6">
