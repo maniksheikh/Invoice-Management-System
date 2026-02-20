@@ -139,7 +139,6 @@
             </tbody>
           </table>
         </div>
-
         <!-- Mobile Layout (Cards) -->
         <div class="md:hidden divide-y divide-white/5">
           <div v-for="invoice in filteredInvoices" :key="invoice._id" class="p-4 space-y-4">
@@ -207,7 +206,6 @@
       </div>
     </div>
   </div>
-
   <!-- Delete Confirmation Modal -->
   <div v-if="showDeleteListModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4">
     <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" @click="showDeleteListModal = false"></div>
