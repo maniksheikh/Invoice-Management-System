@@ -5,12 +5,10 @@
       <div class="absolute top-0 left-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-[100px]"></div>
       <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[100px]"></div>
     </div>
-
     <!-- Loading State -->
     <div v-if="!isAuthReady" class="min-h-screen flex items-center justify-center relative z-20">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
     </div>
-
     <div v-else-if="!isLoggedIn" :class="['max-w-md w-full space-y-8 p-8 rounded-3xl border backdrop-blur-xl shadow-2xl relative z-10 transition-colors duration-500', store.theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-white border-slate-200']">
       <div>
         <div class="flex justify-center">
@@ -27,7 +25,6 @@
           Sign in to manage your invoices
         </p>
       </div>
-
       <!-- Error Alert -->
       <div v-if="error" class="bg-rose-500/10 border border-rose-500/20 px-4 py-3 rounded-xl transition-colors">
         <p :class="['text-center text-sm font-medium', store.theme === 'dark' ? 'text-rose-400' : 'text-rose-600']">{{ error }}</p>
