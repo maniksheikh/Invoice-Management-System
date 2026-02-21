@@ -5,12 +5,10 @@
       <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px]"></div>
       <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px]"></div>
     </div>
-
     <!-- Loading State -->
     <div v-if="!isAuthReady" class="min-h-screen flex items-center justify-center relative z-20">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
     </div>
-
     <div v-else-if="isLoggedIn" class="max-w-4xl mx-auto space-y-8">
       <!-- Header -->
       <div :class="['border rounded-3xl p-8 backdrop-blur-xl relative overflow-hidden group transition-all duration-500', store.theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-white border-slate-200 shadow-sm']">
@@ -23,7 +21,6 @@
             </div>
             <div class="absolute bottom-2 right-2 w-6 h-6 bg-emerald-500 border-4 border-slate-900 rounded-full"></div>
           </div>
-          
           <div class="text-center md:text-left flex-1">
             <div v-if="!isEditing" class="space-y-1">
               <div class="flex items-center gap-3">
@@ -31,7 +28,6 @@
               </div>
               <p :class="['font-medium mb-4 transition-colors', store.theme === 'dark' ? 'text-indigo-300' : 'text-indigo-600']">{{ user?.email }}</p>
             </div>
-            
             <div v-else class="space-y-4 mb-4">
               <div>
                 <label class="text-xs text-gray-400 font-medium uppercase tracking-wider">Full Name</label>
