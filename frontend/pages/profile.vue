@@ -39,7 +39,6 @@
                 />
               </div>
             </div>
-
             <div class="flex flex-wrap justify-center md:justify-start gap-3">
               <span v-if="userDetails?.plan" class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-sm font-medium border border-indigo-500/20">
                 {{ userDetails.plan }}
@@ -55,7 +54,6 @@
               </span>
             </div>
           </div>
-
           <div class="flex flex-col gap-3 min-w-[140px]">
             <template v-if="!isEditing">
               <button @click="editProfile" class="px-6 py-2 bg-indigo-500 hover:bg-indigo-400 text-white cursor-pointer rounded-xl font-medium transition-all shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 transform">
@@ -76,7 +74,6 @@
           </div>
         </div>
       </div>
-
       <!-- Stats Grid -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div v-for="(stat, index) in profileStats" :key="index" :class="['border rounded-3xl p-6 backdrop-blur-xl transition-all', store.theme === 'dark' ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-white border-slate-200 hover:border-indigo-500/30 shadow-sm']">
@@ -84,7 +81,6 @@
           <p class="text-2xl font-bold">{{ stat.value }}</p>
         </div>
       </div>
-
       <!-- Account Settings Section (Placeholder) -->
       <div :class="['border rounded-3xl p-8 backdrop-blur-xl transition-colors duration-500', store.theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-white border-slate-200 shadow-sm']">
         <h2 class="text-xl font-bold mb-6">Account Settings</h2>
