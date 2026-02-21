@@ -32,7 +32,6 @@
       <div v-if="error" class="bg-rose-500/10 border border-rose-500/20 px-4 py-3 rounded-xl transition-colors">
         <p :class="['text-center text-sm font-medium', store.theme === 'dark' ? 'text-rose-400' : 'text-rose-600']">{{ error }}</p>
       </div>
-
       <form class="mt-8 space-y-6" @submit.prevent="handleLogin">
         <div class="space-y-4">
           <div>
@@ -61,7 +60,6 @@
               placeholder="••••••••"/>
           </div>
         </div>
-
         <div>
           <button 
             type="submit" 
@@ -80,7 +78,6 @@
               <span class="px-2 bg-white/5 text-gray-400">Or continue with</span>
             </div>
           </div>
-
           <div class="mt-6">
             <button
               type="button"
@@ -98,7 +95,6 @@
             </button>
           </div>
         </div>
-
         <div class="text-center">
           <p :class="['text-sm transition-colors', store.theme === 'dark' ? 'text-gray-400' : 'text-slate-500']">
             Don't have an account? 
