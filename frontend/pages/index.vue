@@ -70,7 +70,6 @@
           </div>
         </NuxtLink>
       </div>
-
       <!-- Recent Invoices Section -->
       <div class="mt-12">
         <div class="flex items-center justify-between mb-6">
@@ -128,7 +127,6 @@
         </div>
       </div>
     </div>
-
     <!-- Guest Landing Page -->
     <div v-else class="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:items-center lg:gap-x-10 lg:px-8 lg:pt-40">
       <div class="mx-auto max-w-2xl shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
